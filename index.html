@@ -107,6 +107,18 @@ td select{min-height:40px;padding:8px}
 .slot .t{font-weight:700;font-variant-numeric:tabular-nums}
 .slot.now{border-color:var(--lime);box-shadow:inset 4px 0 0 var(--lime)}
 
+/* Overview layout: aktive bestillinger til venstre */
+.ovlayout{display:grid;grid-template-columns:minmax(0,1fr);gap:16px}
+.ovmain{min-width:0}
+.ovside{min-width:0}
+.ovhead{margin-top:14px;display:flex;align-items:center;gap:8px}
+.ovcount{font-size:14px;font-weight:700;background:var(--ice);border-radius:999px;padding:2px 10px}
+@media (min-width:1000px){
+  .ovlayout{grid-template-columns:380px minmax(0,1fr)}
+  .ovside{position:sticky;top:calc(80px + env(safe-area-inset-top,0px));align-self:start;max-height:calc(100vh - 100px);overflow-y:auto;padding-right:4px}
+  .ovside .ticket .what{font-size:18px}
+}
+
 /* Overview per area */
 .areas{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}
 .acard{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px;border-top:6px solid var(--line)}
@@ -531,6 +543,12 @@ details summary{color:var(--muted);cursor:pointer;font-weight:600}
 
   <!-- OVERVIEW -->
   <section id="tab-overview" hidden>
+  <div class="ovlayout">
+    <aside class="ovside">
+      <h2 class="ovhead">Alle aktive bestillinger <span class="ovcount" id="activeCount"></span></h2>
+      <div class="list" id="allActive"></div>
+    </aside>
+    <div class="ovmain">
     <div class="stats" style="margin-top:14px">
       <div class="stat"><b id="sNy">0</b><span>venter</span></div>
       <div class="stat"><b id="sMove">0</b><span>på vei</span></div>
@@ -540,13 +558,13 @@ details summary{color:var(--muted);cursor:pointer;font-weight:600}
     <div class="table-wrap"><table><thead><tr><th>Bar</th><th>Område</th><th>Venter</th><th>På vei</th><th>Levert</th></tr></thead><tbody id="perBar"></tbody></table></div>
     <h2>Per område</h2>
     <div class="areas" id="perArea"></div>
-    <h2>Alle aktive bestillinger</h2>
-    <div class="list" id="allActive"></div>
     <div class="card admin-only" hidden>
       <b>Rydd opp</b>
       <p style="margin:6px 0 10px;color:var(--muted)">Fjerner leverte bestillinger og ferdige oppgaver.</p>
       <button class="btn ghost" id="clearDone">Rydd opp</button>
     </div>
+    </div>
+  </div>
   </section>
 </div>
 <datalist id="runnerList"></datalist>
@@ -595,7 +613,7 @@ const EXACT=new Map(Object.entries({
 "Ingen barer":"No bars","Ingen bestillinger ennå. Trykk på det dere trenger over, og send.":"No orders yet. Tap what you need above and send.","Ingen kommende vakter.":"No upcoming shifts.",
 "Ingen leveringer akkurat nå.":"No deliveries right now.","Ingen meldinger ennå. Si hei 👋":"No messages yet. Say hi 👋","Ingen områder ennå.":"No areas yet.","Ingen oppgaver lagt inn.":"No tasks added.",
 "Ingen oppgaver på deg. 👌":"No tasks for you. 👌","Ingen runner på vakt":"No runner on shift","Ingen runner på vakt akkurat nå":"No runner on shift right now",
-"Ingen runnere ennå. Legg til under.":"No runners yet. Add one below.","Ingen runnere på lista ennå.":"No runners on the list yet.","Ingen vakt satt opp":"No shift scheduled",
+"Ingen runnere ennå. Legg til under.":"No runners yet. Add one below.","Ingen runnere ennå.":"No runners yet.","Ingen barer ennå. Legg dem til under ⚙️ Admin.":"No bars yet. Add them under ⚙️ Admin.","Ingen runnere på lista ennå.":"No runners on the list yet.","Ingen vakt satt opp":"No shift scheduled",
 "Ingen vakter satt opp ennå.":"No shifts scheduled yet.","Ingen vakter.":"No shifts.","Ingen egne oppgaver.":"No personal tasks.","Ingen på vakt":"Nobody on shift","Ingenting å rydde":"Nothing to clean up",
 "Innlogget":"Logged in","Ja":"Yes","Klarte ikke å lese bildet. Prøv et annet.":"Couldn't read that photo. Try another one.","Kunne ikke endre navnet":"Couldn't change the name",
 "Kunne ikke lagre":"Couldn't save","Kunne ikke sende":"Couldn't send","Kunne ikke sende. Prøv igjen.":"Couldn't send. Try again.","Kunne ikke ta bestillingen":"Couldn't take the order",
@@ -793,7 +811,7 @@ function allowedTabs(){
 }
 let curTab="";
 function showTab(t){
-  curTab=t;document.body.classList.toggle("wide",t==="plan");
+  curTab=t;document.body.classList.toggle("wide",t==="plan"||t==="overview");
   ALL_TABS.forEach(x=>$("tab-"+x).hidden=x!==t);
   document.querySelectorAll("nav.tabs button").forEach(b=>b.setAttribute("aria-selected",b.dataset.tab===t));
   $("gear").setAttribute("aria-pressed",String(t==="admin"));
@@ -1025,7 +1043,7 @@ function renderRoster(){
     const s2=[nS&&`${nS} vakt${nS>1?"er":""}`,nT&&`${nT} oppgave${nT>1?"r":""}`,nD&&`${nD} på vei`].filter(Boolean).join(" · ")||"–";
     const seen=seenOf(n),login=isOnline(n)?`<span class="dot on"></span>Innlogget`:seen?`<span class="dot"></span>Sist sett ${hm(seen)}`:`<span class="dot"></span>Ikke logget inn`;
     return `<button class="rcard ${f?"on":""} ${same(n,selRunner)?"sel":""}" data-pick-runner="${esc(n)}"><b>${esc(n)}</b><div class="s1">${s1}</div><div class="s1">${login}</div><div class="s2">${s2}</div></button>`;
-  }).join("")||`<div class="empty" style="flex:1">Ingen runnere ennå. Legg til under.</div>`;
+  }).join("")||`<div class="empty" style="flex:1">${adminMode()?"Ingen runnere ennå. Legg til under.":"Ingen runnere ennå."}</div>`;
   if(selRunner&&!names.some(n=>same(n,selRunner)))selRunner="";
   if(!selRunner){$("rosterDetail").innerHTML="";return}
   const n=names.find(x=>same(x,selRunner)),doc=runnersDocs.find(r=>same(r.name,n));
@@ -1210,7 +1228,7 @@ function renderCalendar(){
   const dayTasks=tasks.filter(t=>t.at>=wStart&&t.at<wEnd);
   const areaNames=[...new Set([...areas.map(a=>a.name),...dayShifts.map(s=>s.area)])].sort((a,b)=>a.localeCompare(b,"no"));
   const cal=$("cal");
-  if(!areaNames.length){cal.className="";cal.innerHTML=`<div class="empty-cal">Legg til områder under ⚙️ Admin for å se kalenderen.</div>`;return}
+  if(!areaNames.length){cal.className="";cal.innerHTML=`<div class="empty-cal">${adminMode()?"Legg til områder under ⚙️ Admin for å se kalenderen.":"Ingen områder ennå."}</div>`;return}
 
   const hrs=[...dayShifts.flatMap(s=>[(s.start-d0)/3600000,(s.end-d0)/3600000]),...dayTasks.flatMap(t=>[(t.at-d0)/3600000,((t.end||t.at)-d0)/3600000])];
   let h0=hrs.length?Math.floor(Math.min(...hrs))-1:16,h1=hrs.length?Math.ceil(Math.max(...hrs))+1:26;
@@ -1268,7 +1286,7 @@ function render(){
   $("barSelect").value=loggedIn?want:"";
   $("barLogin").hidden=loggedIn;$("barSession").hidden=!loggedIn;
   $("barPick").innerHTML=barNames.map(n=>{const a=areaOfBar(n);return `<button data-bar="${esc(n)}" data-barid="${esc(barId(n)||"")}"><b>${esc(n)}</b>${a?`<span>📍 ${esc(a)}</span>`:""}</button>`}).join("")
-    ||`<div class="empty">${db?"Ingen barer ennå. Admin legger dem inn under ⚙️ Admin.":"Laster barer…"}</div>`;
+    ||`<div class="empty">${db?(adminMode()?"Ingen barer ennå. Legg dem til under ⚙️ Admin.":"Ingen barer ennå."):"Laster barer…"}</div>`;
   updateSend();
   const myBar=$("barSelect").value,myBarArea=areaOfBar(myBar);
   const barStaff=myBarArea?staffOn(myBarArea).map(s=>s.runner):[];
@@ -1337,7 +1355,7 @@ function render(){
       ${nextS?`<div class="sub">Neste: ${esc(nextS.runner)} kl. ${hm(nextS.start)}</div>`:""}
       <div class="bars">${barsHere.length?"🍸 "+barsHere.map(esc).join(", "):`<span class="sub">Ingen barer</span>`}</div>
       <div class="sub" style="margin-top:4px">${waiting} bestilling${waiting===1?"":"er"} venter</div></div>`;
-  }).join("")||`<div class="empty">Legg til områder under ⚙️ Admin (f.eks. «1. etasje», «Bakgården»).</div>`;
+  }).join("")||`<div class="empty">${adminMode()?"Legg til områder under ⚙️ Admin (f.eks. «1. etasje», «Bakgården»).":"Ingen områder ennå."}</div>`;
 
   renderCalendar();
   $("allShifts").innerHTML=shiftSchedule(shifts.filter(s=>s.end>now-3600000),true)||`<div class="empty">Ingen vakter satt opp ennå.</div>`;
@@ -1362,7 +1380,7 @@ function render(){
      const wait=bs.reduce((n,b)=>n+cnt(b.name,"ny"),0),move=bs.reduce((n,b)=>n+cnt(b.name,"på vei"),0);
      return `<div class="acard ${a?(on.length?"staffed":"unstaffed"):""}">
        <div class="hd"><h3 style="margin:0">${a?esc(a):"Uten område"}</h3><span class="tot">${bs.length} bar${bs.length===1?"":"er"}</span></div>
-       ${a?`<div class="run">${on.length?"🏃 "+on.map(esc).join(", "):`<span class="late">Ingen runner på vakt</span>`}</div>`:`<div class="run tot">Gi disse et område under ⚙️ Admin</div>`}
+       ${a?`<div class="run">${on.length?"🏃 "+on.map(esc).join(", "):`<span class="late">Ingen runner på vakt</span>`}</div>`:(adminMode()?`<div class="run tot">Gi disse et område under ⚙️ Admin</div>`:"")}
        <ul>${bs.map(b=>{const w=cnt(b.name,"ny"),m=cnt(b.name,"på vei");
          return `<li><span>${esc(b.name)}</span><span class="c">${w?`<span class="tag ny">${w} venter</span>`:""}${m?`<span class="tag moving">${m} på vei</span>`:""}${!w&&!m?`<span style="color:var(--muted);font-weight:500">✓</span>`:""}</span></li>`}).join("")||`<li class="tot">Ingen barer</li>`}</ul>
        ${wait||move?`<div class="tot" style="margin-top:6px">Totalt: ${wait} venter · ${move} på vei</div>`:""}
@@ -1375,6 +1393,7 @@ function render(){
     const os=orders.filter(o=>o.bar===b.name),c=s=>os.filter(o=>o.status===s).length;
     return `<tr><td><b>${esc(b.name)}</b></td><td>${esc(b.area||"–")}</td><td>${c("ny")}</td><td>${c("på vei")}</td><td>${c("levert")}</td></tr>`}).join("")
     ||`<tr><td colspan="5" style="color:var(--muted)">Ingen barer ennå.</td></tr>`;
+  $("activeCount").textContent=orders.filter(o=>o.status!=="levert").length||"";
   fill("allActive",orders.filter(o=>o.status!=="levert").sort(sortQueue).map(o=>ticket(o,o.status==="ny"?`<button class="btn" data-act="claim" data-id="${o.id}">Ta den</button>`:"")).join(""),"Ingen aktive bestillinger.");
 }
 setInterval(render,30000);
