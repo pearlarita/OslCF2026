@@ -847,7 +847,7 @@ function renderStartHints(){
 $("roleBtn").onclick=()=>{chosen=false;curTab="";applyRoles();window.scrollTo({top:0})};
 $("lockBack").onclick=()=>{curTab="";applyRoles();window.scrollTo({top:0})};
 function setRole(r){chosen=!!r;store.set("role",r);if(r){store.set("tab",r);showTab(r)}applyRoles();render();window.scrollTo({top:0})}
-document.querySelectorAll("nav.tabs button").forEach(b=>b.onclick=()=>showTab(b.dataset.tab));
+document.querySelectorAll("nav.tabs button").forEach(b=>b.onclick=()=>{chosen=true;showTab(b.dataset.tab)});
 document.addEventListener("click",e=>{const b=e.target.closest("[data-role]");if(b)setRole(b.dataset.role)});
 $("gear").onclick=()=>{if(curTab==="admin"){curTab="";applyRoles();return}showTab("admin");window.scrollTo({top:0})};
 function applyAdmin(){applyRoles()}
