@@ -306,7 +306,7 @@ details summary{color:var(--muted);cursor:pointer;font-weight:600}
 <body>
 <div class="wrap">
   <header>
-    <h1>Barlogistikk<small>Oslo Cocktailfestival – barer og backrunners</small></h1>
+    <h1>Barlogistikk<small>Oslo Cocktailfestival – barer og barbacks</small></h1>
     <div class="hdr-r">
       <span class="live" id="live">Kobler til…</span>
       <div class="hdr-btns"><button class="langbtn" id="roleBtn" type="button" aria-label="Bytt rolle" title="Bytt rolle" hidden></button><button class="langbtn" id="langBtn" type="button">EN</button>
@@ -330,7 +330,7 @@ details summary{color:var(--muted);cursor:pointer;font-weight:600}
     <p style="margin:0 0 12px;color:var(--muted)">Velg én gang – telefonen husker det.</p>
     <div class="rolepick">
       <button data-role="bar"><span>🍸</span><b>Bar</b><small>Bestill is, glass, varer og hjelp</small><em data-last="bar" hidden></em></button>
-      <button data-role="runner"><span>🏃</span><b>Runner</b><small>Se vakten din, ta bestillinger og chat</small><em data-last="runner" hidden></em></button>
+      <button data-role="runner"><span>🏃</span><b>Barback</b><small>Se vakten din, ta bestillinger og chat</small><em data-last="runner" hidden></em></button>
     </div>
   </section>
 
@@ -354,7 +354,7 @@ details summary{color:var(--muted);cursor:pointer;font-weight:600}
       </div>
       <div id="prefForm">
         <h3>Hvordan vil dere motta ting?</h3>
-        <p class="calhint" style="margin:0 0 10px">Velg én gang. Runnerne ser dette på alle bestillingene deres.</p>
+        <p class="calhint" style="margin:0 0 10px">Velg én gang. Barbackene ser dette på alle bestillingene deres.</p>
         <div class="chips" id="prefChips"></div>
         <label class="f" for="prefDetail">Detaljer (valgfritt)</label>
         <input type="text" id="prefDetail" placeholder="F.eks. bakdøra ved kjøkkenet, spør etter Kari">
@@ -374,7 +374,7 @@ details summary{color:var(--muted);cursor:pointer;font-weight:600}
         <div class="qty"><button id="qMinus" aria-label="Færre">−</button><span id="qVal">1</span><button id="qPlus" aria-label="Flere">+</button></div>
         <input type="text" id="unit" placeholder="Enhet (poser, kasser…)">
       </div>
-      <label class="f" for="note">Beskjed til runner (valgfritt)</label>
+      <label class="f" for="note">Beskjed til barback (valgfritt)</label>
       <input type="text" id="note" placeholder="F.eks. lever bak disken">
       <div id="photoBox" hidden>
         <label class="f">Bilde (valgfritt)</label>
@@ -442,11 +442,11 @@ details summary{color:var(--muted);cursor:pointer;font-weight:600}
   <!-- VAKTPLAN -->
   <section id="tab-plan" hidden>
   <div class="planlayout">
-    <aside class="roster" aria-label="Runnere">
-      <div class="rhead"><h2 style="margin:0">Runnere</h2><span class="calhint" id="rosterCount" style="margin:0"></span></div>
+    <aside class="roster" aria-label="Barbacks">
+      <div class="rhead"><h2 style="margin:0">Barbacks</h2><span class="calhint" id="rosterCount" style="margin:0"></span></div>
       <div class="rlist" id="rosterList"></div>
       <div class="row admin-only" style="margin-top:10px" hidden>
-        <input type="text" id="newRunner" placeholder="Ny runner">
+        <input type="text" id="newRunner" placeholder="Ny barback">
         <button class="btn" id="addRunner" style="flex:0 0 auto">Legg til</button>
       </div>
       <div id="rosterDetail"></div>
@@ -506,7 +506,7 @@ details summary{color:var(--muted);cursor:pointer;font-weight:600}
     <h2>Sett opp vakt</h2>
     <div class="card" style="margin-top:0">
       <div class="row">
-        <div><label class="f" for="shRunner" style="margin-top:0">Runner</label><input type="text" id="shRunner" list="runnerList" placeholder="Navn"></div>
+        <div><label class="f" for="shRunner" style="margin-top:0">Barback</label><input type="text" id="shRunner" list="runnerList" placeholder="Navn"></div>
         <div><label class="f" for="shArea" style="margin-top:0">Område</label><select id="shArea"></select></div>
       </div>
       <label class="f" for="shDay">Dag</label>
@@ -600,7 +600,7 @@ let LANG=(()=>{try{return localStorage.getItem("lang")||"no"}catch(e){return "no
 const LOCALE=()=>LANG==="en"?"en-GB":"nb-NO";
 const EXACT=new Map(Object.entries({
 "Admin":"Admin","Akkurat nå på gulvet":"On the floor right now","Alle aktive bestillinger":"All active orders","Antall":"Quantity",
-"Bare fra mitt område":"Only from my area","Barer":"Bars","Barlogistikk":"Bar Logistics","Beskjed til runner (valgfritt)":"Note for the runner (optional)",
+"Bare fra mitt område":"Only from my area","Barer":"Bars","Barlogistikk":"Bar Logistics","Beskjed til barback (valgfritt)":"Note for the barback (optional)",
 "Bestill is, glass, varer og hjelp":"Order ice, glasses, supplies and help","Bilde (valgfritt)":"Photo (optional)","Bytt":"Switch","Bytt bar":"Switch bar","Gjentas":"Repeats","Nei":"No","Hvert 15. minutt":"Every 15 minutes","Hvert 30. minutt":"Every 30 minutes","Hver time":"Every hour","Hver 2. time":"Every 2 hours","Annet…":"Other…","Gjenta til":"Repeat until","Hvert":"Every","Enhet":"Unit","minutt":"minutes","time":"hours","Hele serien":"Whole series","Bare denne":"Just this one","Serien er slettet":"Series deleted","Bytt rolle":"Switch role",
 "Dag":"Day","Får ikke kontakt med serveren. Sjekk nettet – prøver igjen automatisk.":"Can't reach the server. Check your connection – retrying automatically.",
 "Deres bestillinger":"Your orders","Detaljer (valgfritt)":"Details (optional)","Du bestiller som":"Ordering as","Du er logget inn som":"Logged in as","Endre":"Change",
@@ -613,29 +613,29 @@ const EXACT=new Map(Object.entries({
 "Kobler til…":"Connecting…","Lagre":"Save","Ledige bestillinger":"Open orders","Legg inn oppgave":"Add task","Legg til":"Add","Legg til bar":"Add bar","Legg til vakt":"Add shift",
 "Levering til dere":"Delivery to you","Levert":"Delivered","Logg inn":"Log in","Logg inn med PIN-kode.":"Log in with your PIN code.","Logg ut":"Log out","Min vakt":"My shift",
 "Mine leveringer":"My deliveries","Mine vakter":"My shifts","Navn":"Name","Neste dag":"Next day","Noe annet? Skriv her":"Something else? Type here","Ny bar":"New bar",
-"Ny runner":"New runner","Nytt område / etasje":"New area / floor","Område":"Area","Områder":"Areas","Oppgaver":"Tasks","Oslo Cocktailfestival – barer og backrunners":"Oslo Cocktail Festival – bars and backrunners",
-"Oversikt":"Overview","PIN-kode":"PIN code","Per bar":"Per bar","Per område":"Per area","På vei":"On the way","Runnere":"Runners","Rydd opp":"Clean up",
+"Ny barback":"New barback","Nytt område / etasje":"New area / floor","Område":"Area","Områder":"Areas","Oppgaver":"Tasks","Oslo Cocktailfestival – barer og barbacks":"Oslo Cocktail Festival – bars and barbacks",
+"Oversikt":"Overview","PIN-kode":"PIN code","Per bar":"Per bar","Per område":"Per area","På vei":"On the way","Barbacks":"Barbacks","Rydd opp":"Clean up",
 "Se vakten din, ta bestillinger og chat":"See your shift, take orders and chat","Send bestilling":"Send order","Sett opp vakt":"Schedule a shift","Skriv en melding…":"Write a message…",
 "Står du ikke på lista? Si fra til en admin, så legger de deg til.":"Not on the list? Ask an admin to add you.","Til":"To","PS: ta bilde av varen, ikke av gjestene <3":"PS: photograph the item, not the guests <3",
 "Trykk hvor som helst for å lukke":"Tap anywhere to close","Trykk på en tom rute for å sette opp en vakt der.":"Tap an empty slot to schedule a shift there.",
 "Trykk på et navn for å endre det. Velg område for å flytte baren.":"Tap a name to edit it. Pick an area to move the bar.","Trykk på navnet ditt. Telefonen husker det.":"Tap your name. Your phone will remember it.",
 "Vakter":"Shifts","Vaktplan":"Schedule","Velg navnet ditt under":"Pick your name under","Velg én gang – telefonen husker det til neste gang.":"Choose once – your phone remembers it.",
-"Velg én gang – telefonen husker det.":"Choose once – your phone remembers it.","Velg én gang. Runnerne ser dette på alle bestillingene deres.":"Choose once. Runners will see this on all your orders.",
+"Velg én gang – telefonen husker det.":"Choose once – your phone remembers it.","Velg én gang. Barbackene ser dette på alle bestillingene deres.":"Choose once. Barbacks will see this on all your orders.",
 "Venter":"Waiting","først.":"first.","levert":"delivered","på vei":"on the way","venter":"waiting","← Tilbake":"← Back","☰ Liste":"☰ List","📅 Kalender":"📅 Calendar",
 "📢 Send som kunngjøring (festes øverst)":"📢 Send as announcement (pinned at top)","📷 Ta bilde av det dere mangler":"📷 Take a photo of what you need",
 "Bilde fra baren":"Photo from the bar","Forhåndsvisning":"Preview","Navn på bar":"Bar name","Vis bildet stort":"Show photo full size",
 "Alle i området":"Everyone in the area","Alle på vakt i området":"Everyone on shift in the area","Alt er levert. Ta en pust 😮‍💨":"Everything's delivered. Take a breather 😮‍💨",
-"Andre runnere":"Other runners","Avbryt":"Cancel","Bar fjernet":"Bar removed","Bar lagt til":"Bar added","Bare admin kan endre område":"Only admins can change areas",
+"Andre barbacks":"Other barbacks","Avbryt":"Cancel","Bar fjernet":"Bar removed","Bar lagt til":"Bar added","Bare admin kan endre område":"Only admins can change areas",
 "Bare admin kan gjøre dette":"Only admins can do this","Bestilling sendt ✓":"Order sent ✓","Bestilling avbrutt":"Order cancelled","Bytte bar på denne telefonen?":"Switch bar on this phone?",
 "Bytte navn på denne telefonen?":"Switch name on this phone?","Den baren finnes allerede":"That bar already exists","Den er din – løp! 🏃":"It's yours – run! 🏃",
-"Den runneren finnes allerede":"That runner already exists","Det finnes allerede en bar med det navnet":"There's already a bar with that name","Du er på vakt nå":"You're on shift now",
+"Den barbacken finnes allerede":"That barback already exists","Det finnes allerede en bar med det navnet":"There's already a bar with that name","Du er på vakt nå":"You're on shift now",
 "Du har ingen vakter lagt inn. Spør vaktansvarlig.":"You have no shifts yet. Ask the shift lead.","Feil kode, prøv igjen":"Wrong code, try again","Fjern":"Remove","Fjernet":"Removed",
-"Frakoblet":"Offline","Fyll inn hva, hvor, fra og til":"Fill in what, where, from and to","Fyll inn runner, område, dag og tid":"Fill in runner, area, day and time",
+"Frakoblet":"Offline","Fyll inn hva, hvor, fra og til":"Fill in what, where, from and to","Fyll inn barback, område, dag og tid":"Fill in barback, area, day and time",
 "Ikke logget inn":"Not logged in","Ingen aktive bestillinger.":"No active orders.","Ingen barer ennå.":"No bars yet.","Ingen barer ennå. Admin legger dem inn under ⚙️ Admin.":"No bars yet. An admin adds them under ⚙️ Admin.",
 "Ingen barer":"No bars","Ingen bestillinger ennå. Trykk på det dere trenger over, og send.":"No orders yet. Tap what you need above and send.","Ingen kommende vakter.":"No upcoming shifts.",
 "Ingen leveringer akkurat nå.":"No deliveries right now.","Ingen meldinger ennå. Si hei 👋":"No messages yet. Say hi 👋","Ingen områder ennå.":"No areas yet.","Ingen oppgaver lagt inn.":"No tasks added.",
-"Ingen oppgaver på deg. 👌":"No tasks for you. 👌","Ingen runner på vakt":"No runner on shift","Ingen runner på vakt akkurat nå":"No runner on shift right now",
-"Ingen runnere ennå. Legg til under.":"No runners yet. Add one below.","Ingen runnere ennå.":"No runners yet.","Ingen barer ennå. Legg dem til under ⚙️ Admin.":"No bars yet. Add them under ⚙️ Admin.","Ingen runnere på lista ennå.":"No runners on the list yet.","Ingen vakt satt opp":"No shift scheduled",
+"Ingen oppgaver på deg. 👌":"No tasks for you. 👌","Ingen barback på vakt":"No barback on shift","Ingen barback på vakt akkurat nå":"No barback on shift right now",
+"Ingen barbacks ennå. Legg til under.":"No barbacks yet. Add one below.","Ingen barbacks ennå.":"No barbacks yet.","Ingen barer ennå. Legg dem til under ⚙️ Admin.":"No bars yet. Add them under ⚙️ Admin.","Ingen barbacks på lista ennå.":"No barbacks on the list yet.","Ingen vakt satt opp":"No shift scheduled",
 "Ingen vakter satt opp ennå.":"No shifts scheduled yet.","Ingen vakter.":"No shifts.","Ingen egne oppgaver.":"No personal tasks.","Ingen på vakt":"Nobody on shift","Ingenting å rydde":"Nothing to clean up",
 "Innlogget":"Logged in","Ja":"Yes","Klarte ikke å lese bildet. Prøv et annet.":"Couldn't read that photo. Try another one.","Kunne ikke endre navnet":"Couldn't change the name",
 "Kunne ikke lagre":"Couldn't save","Kunne ikke sende":"Couldn't send","Kunne ikke sende. Prøv igjen.":"Couldn't send. Try again.","Kunne ikke ta bestillingen":"Couldn't take the order",
@@ -670,7 +670,7 @@ const RX=[
 [/^(.+) satt på (.+) ✓$/,(a,b)=>`${a} assigned to ${b} ✓`],
 [/^Velg område og tid for (.+)$/,a=>"Pick area and time for "+a],
 [/^Oppgave til (.+)$/,a=>"Task for "+a],
-[/^(.+) kl\. (\d\d:\d\d) – skriv inn runner$/,(a,b)=>`${a} at ${b} – enter a runner`],
+[/^(.+) kl\. (\d\d:\d\d) – skriv inn barback$/,(a,b)=>`${a} at ${b} – enter a barback`],
 [/^Ingen ventende i (.+)\. 😮‍💨$/,a=>`Nothing waiting in ${a}. 😮‍💨`],
 [/^(.+) har allerede vakt (.+) i (.+)\. Legge til likevel\?$/,(a,b,c)=>`${a} already has a shift ${b} in ${c}. Add anyway?`],
 [/^Fjerne (\d+) leverte bestillinger og (\d+) ferdige oppgaver\?$/,(a,b)=>`Remove ${a} delivered orders and ${b} completed tasks?`],
@@ -694,7 +694,7 @@ const RX=[
 [/^Til kl\. (\d\d:\d\d)$/,a=>"Until "+a],
 [/^til (\d\d:\d\d)$/,a=>"until "+a],
 [/^Barer: (.+)$/,a=>"Bars: "+a],
-[/^Runner nå: (.+)$/,a=>"Runner now: "+a],
+[/^Barback nå: (.+)$/,a=>"Barback now: "+a],
 [/^Neste: (.+) kl\. (\d\d:\d\d)$/,(a,b)=>`Next: ${a} at ${b}`],
 [/^Neste: (.+)$/,a=>"Next: "+a],
 [/^📢 Kunngjøring fra (.+)$/,a=>"📢 Announcement from "+a],
@@ -1100,7 +1100,7 @@ function renderRoster(){
     const s2=[nS&&`${nS} vakt${nS>1?"er":""}`,nT&&`${nT} oppgave${nT>1?"r":""}`,nD&&`${nD} på vei`].filter(Boolean).join(" · ")||"–";
     const seen=seenOf(n),login=isOnline(n)?`<span class="dot on"></span>Innlogget`:seen?`<span class="dot"></span>Sist sett ${hm(seen)}`:`<span class="dot"></span>Ikke logget inn`;
     return `<button class="rcard ${f?"on":""} ${same(n,selRunner)?"sel":""}" data-pick-runner="${esc(n)}"><b>${esc(n)}</b><div class="s1">${s1}</div><div class="s1">${login}</div><div class="s2">${s2}</div></button>`;
-  }).join("")||`<div class="empty" style="flex:1">${adminMode()?"Ingen runnere ennå. Legg til under.":"Ingen runnere ennå."}</div>`;
+  }).join("")||`<div class="empty" style="flex:1">${adminMode()?"Ingen barbacks ennå. Legg til under.":"Ingen barbacks ennå."}</div>`;
   if(selRunner&&!names.some(n=>same(n,selRunner)))selRunner="";
   if(!selRunner){$("rosterDetail").innerHTML="";return}
   const n=names.find(x=>same(x,selRunner)),doc=runnersDocs.find(r=>same(r.name,n));
@@ -1130,7 +1130,7 @@ document.addEventListener("click",async e=>{
 $("addRunner").onclick=async()=>{
   if(!adminMode()){toast("Bare admin kan gjøre dette");return}
   const name=$("newRunner").value.trim();if(!name||!db)return;
-  if(rosterNames().some(n=>same(n,name))){toast("Den runneren finnes allerede");selRunner=rosterNames().find(n=>same(n,name));renderRoster();return}
+  if(rosterNames().some(n=>same(n,name))){toast("Den barbacken finnes allerede");selRunner=rosterNames().find(n=>same(n,name));renderRoster();return}
   try{await db.collection("runners").doc().set({name,createdAt:Date.now()});$("newRunner").value="";selRunner=name;toast(name+" lagt til")}catch(e){toast("Kunne ikke lagre")}
 };
 $("newRunner").addEventListener("keydown",e=>{if(e.key==="Enter")$("addRunner").click()});
@@ -1148,7 +1148,7 @@ $("addBar").onclick=async()=>{
 };
 $("addShift").onclick=async()=>{
   const runner=$("shRunner").value.trim(),area=$("shArea").value,day=$("shDay").value,f=$("shFrom").value,t=$("shTo").value;
-  if(!runner||!area||!day||!f||!t){toast("Fyll inn runner, område, dag og tid");return}
+  if(!runner||!area||!day||!f||!t){toast("Fyll inn barback, område, dag og tid");return}
   let start=toTs(day,f),end=toTs(day,t);if(end<=start)end+=86400000; // over midnatt
   const clash=shifts.find(s=>s.runner.toLowerCase()===runner.toLowerCase()&&s.start<end&&start<s.end);
   if(clash&&!await ask(`${runner} har allerede vakt ${hm(clash.start)}–${hm(clash.end)} i ${clash.area}. Legge til likevel?`))return;
@@ -1306,7 +1306,7 @@ function renderWhoSelect(){
   const prev=$("tkWho").value;
   $("tkWho").innerHTML=`<option value="">Alle på vakt i området</option>`+
     (onShift.length?`<optgroup label="På vakt der da">${onShift.map(n=>`<option>${esc(n)}</option>`).join("")}</optgroup>`:"")+
-    (others.length?`<optgroup label="Andre runnere">${others.map(n=>`<option>${esc(n)}</option>`).join("")}</optgroup>`:"");
+    (others.length?`<optgroup label="Andre barbacks">${others.map(n=>`<option>${esc(n)}</option>`).join("")}</optgroup>`:"");
   $("tkWho").value=prev;
 }
 function shiftSchedule(list,withDelete){
@@ -1385,7 +1385,7 @@ $("cal").addEventListener("click",async e=>{
   $("shArea").value=col.dataset.col;$("shDay").value=dayKey(ts);
   $("shFrom").value=t(d);$("shTo").value=t(new Date(ts+4*3600000));
   $("shRunner").scrollIntoView({behavior:"smooth",block:"center"});setTimeout(()=>$("shRunner").focus(),300);
-  toast(`${col.dataset.col} kl. ${t(d)} – skriv inn runner`);
+  toast(`${col.dataset.col} kl. ${t(d)} – skriv inn barback`);
 });
 
 /* Main render */
@@ -1408,7 +1408,7 @@ function render(){
   {const p=prefOf(myBar),show=!!p&&!prefEditing;
    $("prefSummary").hidden=!show;$("prefForm").hidden=show;
    if(show)$("prefText").textContent=prefLabel(p);}
-  $("barRunnerInfo").textContent=myBar?(myBarArea?`📍 ${myBarArea} · ${barStaff.length?"Runner nå: "+barStaff.join(", "):"Ingen runner på vakt akkurat nå"}`:""):"";
+  $("barRunnerInfo").textContent=myBar?(myBarArea?`📍 ${myBarArea} · ${barStaff.length?"Barback nå: "+barStaff.join(", "):"Ingen barback på vakt akkurat nå"}`:""):"";
 
   const mine=orders.filter(o=>o.bar===myBar).sort((a,b)=>{const r={"ny":0,"på vei":1,"levert":2};return (r[a.status]-r[b.status])||(b.createdAt-a.createdAt)}).slice(0,30);
   fill("barOrders",mine.map(o=>ticket(o,o.status==="ny"?`<button class="btn ghost sm" data-act="cancel" data-id="${o.id}">Avbryt</button>`:"")).join(""),
@@ -1422,7 +1422,7 @@ function render(){
    const on=n=>!!floorOf(n);
    names.sort((a,b)=>(on(b)-on(a))||a.localeCompare(b,"no"));
    $("runPick").innerHTML=names.map(n=>`<button data-runner="${esc(n)}"><b>${esc(n)}</b>${floorOf(n)?`<span>📍 ${esc(floorOf(n))} nå</span>`:`<span>${(()=>{const x=shifts.filter(s=>same(s.runner,n)&&s.start>now).sort((a,b)=>a.start-b.start)[0];return x?"Vakt kl. "+hm(x.start):""})()}</span>`}</button>`).join("")
-     ||`<div class="empty">${db?"Ingen runnere på lista ennå.":"Laster…"}</div>`;}
+     ||`<div class="empty">${db?"Ingen barbacks på lista ennå.":"Laster…"}</div>`;}
   // Logg ut runner som er fjernet fra lista
   if(me&&rosterLoaded&&!rosterNames().some(n=>same(n,me))){setRunner("");toast("Navnet ditt er ikke på lista lenger")}
   const myShifts=me?shifts.filter(s=>s.runner.toLowerCase()===meL&&s.end>now-3600000).sort((a,b)=>a.start-b.start):[];
@@ -1494,7 +1494,7 @@ function render(){
      const wait=bs.reduce((n,b)=>n+cnt(b.name,"ny"),0),move=bs.reduce((n,b)=>n+cnt(b.name,"på vei"),0);
      return `<div class="acard ${a?(on.length?"staffed":"unstaffed"):""}">
        <div class="hd"><h3 style="margin:0">${a?esc(a):"Uten område"}</h3><span class="tot">${bs.length} bar${bs.length===1?"":"er"}</span></div>
-       ${a?`<div class="run">${on.length?"🏃 "+on.map(esc).join(", "):`<span class="late">Ingen runner på vakt</span>`}</div>`:(adminMode()?`<div class="run tot">Gi disse et område under ⚙️ Admin</div>`:"")}
+       ${a?`<div class="run">${on.length?"🏃 "+on.map(esc).join(", "):`<span class="late">Ingen barback på vakt</span>`}</div>`:(adminMode()?`<div class="run tot">Gi disse et område under ⚙️ Admin</div>`:"")}
        <ul>${bs.map(b=>{const w=cnt(b.name,"ny"),m=cnt(b.name,"på vei");
          return `<li><span>${esc(b.name)}</span><span class="c">${w?`<span class="tag ny">${w} venter</span>`:""}${m?`<span class="tag moving">${m} på vei</span>`:""}${!w&&!m?`<span style="color:var(--muted);font-weight:500">✓</span>`:""}</span></li>`}).join("")||`<li class="tot">Ingen barer</li>`}</ul>
        ${wait||move?`<div class="tot" style="margin-top:6px">Totalt: ${wait} venter · ${move} på vei</div>`:""}
