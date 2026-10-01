@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Barlogistikk – Oslo Cocktailfestival</title>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🍸%3C/text%3E%3C/svg%3E">  
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🍸%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -193,6 +193,13 @@ body.wide .wrap{max-width:1180px}
 .gear{width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:var(--panel);font-size:20px;line-height:1;padding:0}
 .gear[aria-pressed="true"]{background:var(--ink);border-color:var(--ink)}
 
+/* Chat popup */
+.chatpop{position:fixed;left:50%;transform:translateX(-50%);top:calc(12px + env(safe-area-inset-top,0px));z-index:25;max-width:min(92vw,420px);width:max-content;
+  display:flex;flex-direction:column;align-items:flex-start;gap:2px;text-align:left;background:var(--panel);color:var(--ink);border:1px solid var(--line);border-left:6px solid var(--cherry);
+  border-radius:14px;padding:10px 14px;box-shadow:0 8px 24px rgba(0,0,0,.18);font-size:15px}
+.chatpop.ann{border-left-color:var(--amber)}
+.chatpop span{color:var(--muted)}
+
 /* Chat */
 .floorpill{display:inline-block;font-size:12px;font-weight:700;background:var(--lime-soft);color:var(--lime);border-radius:999px;padding:1px 8px;margin-left:4px;vertical-align:1px}
 nav.tabs button{position:relative}
@@ -373,7 +380,7 @@ details summary{color:var(--muted);cursor:pointer;font-weight:600}
         <input type="file" id="photoInput" accept="image/*" capture="environment" hidden>
         <button class="btn ghost photobtn" id="photoBtn" type="button">📷 Ta bilde av det dere mangler</button>
         <div class="photoprev" id="photoPrev" hidden><img id="photoImg" alt="Forhåndsvisning"><button class="btn ghost sm" id="photoRm" type="button">Fjern bilde</button></div>
-        <p class="calhint" style="margin-top:6px">Tips: ta bilde av varen, ikke av gjester.</p>
+        <p class="calhint" style="margin-top:6px">PS: ta bilde av varen, ikke av gjestene &lt;3</p>
       </div>
       <label class="check"><input type="checkbox" id="urgent"> Haster – vi er tomme</label>
       <button class="btn big" id="send" disabled>Send bestilling</button>
@@ -571,6 +578,7 @@ details summary{color:var(--muted);cursor:pointer;font-weight:600}
 </div>
 <datalist id="runnerList"></datalist>
 <div class="lightbox" id="lightbox" hidden><img id="lbImg" alt="Bilde fra baren" referrerpolicy="no-referrer"><p>Trykk hvor som helst for å lukke</p></div>
+<button class="chatpop" id="chatPop" type="button" hidden></button>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script>
@@ -596,7 +604,7 @@ const EXACT=new Map(Object.entries({
 "Ny runner":"New runner","Nytt område / etasje":"New area / floor","Område":"Area","Områder":"Areas","Oppgaver":"Tasks","Oslo Cocktailfestival – barer og backrunners":"Oslo Cocktail Festival – bars and backrunners",
 "Oversikt":"Overview","PIN-kode":"PIN code","Per bar":"Per bar","Per område":"Per area","På vei":"On the way","Runnere":"Runners","Rydd opp":"Clean up",
 "Se vakten din, ta bestillinger og chat":"See your shift, take orders and chat","Send bestilling":"Send order","Sett opp vakt":"Schedule a shift","Skriv en melding…":"Write a message…",
-"Står du ikke på lista? Si fra til en admin, så legger de deg til.":"Not on the list? Ask an admin to add you.","Til":"To","Tips: ta bilde av varen, ikke av gjester.":"Tip: photograph the item, not the guests.",
+"Står du ikke på lista? Si fra til en admin, så legger de deg til.":"Not on the list? Ask an admin to add you.","Til":"To","PS: ta bilde av varen, ikke av gjestene <3":"PS: photograph the item, not the guests <3",
 "Trykk hvor som helst for å lukke":"Tap anywhere to close","Trykk på en tom rute for å sette opp en vakt der.":"Tap an empty slot to schedule a shift there.",
 "Trykk på et navn for å endre det. Velg område for å flytte baren.":"Tap a name to edit it. Pick an area to move the bar.","Trykk på navnet ditt. Telefonen husker det.":"Tap your name. Your phone will remember it.",
 "Vakter":"Shifts","Vaktplan":"Schedule","Velg navnet ditt under":"Pick your name under","Velg én gang – telefonen husker det til neste gang.":"Choose once – your phone remembers it.",
@@ -726,6 +734,7 @@ new MutationObserver(ms=>{for(const m of ms){
 function applyLang(){
   document.documentElement.lang=LANG==="en"?"en":"no";
   document.title=LANG==="en"?"Bar Logistics – Oslo Cocktail Festival":"Barlogistikk – Oslo Cocktailfestival";
+  if(typeof setUnread==="function"&&typeof chat!=="undefined"&&!$("chatBadge").hidden)setUnread(+$("chatBadge").textContent||0);
   const b=document.getElementById("langBtn");if(b){b.textContent=LANG==="en"?"NO":"EN";b.setAttribute("aria-label",LANG==="en"?"Bytt til norsk":"Switch to English")}
   trTree(document.body);
 }
@@ -944,20 +953,42 @@ async function sendChat(text){
   text=(text||"").trim();if(!text||!db)return;
   const name=chatName();if(!name){$("chatNameRow").hidden=false;toast("Velg navnet ditt under Min vakt først");return}
   const ann=isAdmin&&$("chatAnnounce").checked;
-  try{await db.collection("chat").doc().set({name,text,ts:Date.now(),admin:isAdmin,announce:ann});
+  try{await db.collection("chat").doc().set({name,text,ts:Date.now(),admin:isAdmin,announce:ann,dev:DEV});
     if(text===$("chatText").value.trim())$("chatText").value="";$("chatAnnounce").checked=false;markRead();}
   catch(e){toast("Kunne ikke sende")}
 }
 $("chatSend").onclick=()=>sendChat($("chatText").value);
 $("chatText").addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.isComposing){e.preventDefault();sendChat($("chatText").value)}});
-function markRead(){const last=chat.length?chat[chat.length-1].ts:Date.now();store.set("chatSeen",String(last));$("chatBadge").hidden=true}
-function onChatUpdate(prevLen){
+function markRead(){const last=chat.length?chat[chat.length-1].ts:Date.now();store.set("chatSeen",String(last));setUnread(0);const p=$("chatPop");if(p)p.hidden=true}
+let lastPopTs=0;
+// Egen id per nettleserfane, så meldinger fra en annen fane/telefon med samme navn også varsles
+const DEV=(()=>{try{let d=sessionStorage.getItem("dev");if(!d){d=Math.random().toString(36).slice(2,10);sessionStorage.setItem("dev",d)}return d}catch(e){return Math.random().toString(36).slice(2,10)}})();
+const isMine=(m,me)=>m.dev?m.dev===DEV:(me&&m.name.toLowerCase()===me);
+function chatAllowed(){return allowedTabs().includes("chat")}
+function setUnread(n){
+  const b=$("chatBadge");b.hidden=!n;b.textContent=n>9?"9+":n;
+  const base=LANG==="en"?"Bar Logistics – Oslo Cocktail Festival":"Barlogistikk – Oslo Cocktailfestival";
+  document.title=n?`(${n>9?"9+":n}) 💬 ${base}`:base;
+  const ic=document.querySelector('link[rel="icon"]');
+  if(ic){if(!ic.dataset.base)ic.dataset.base=ic.href;
+    ic.href=n?"data:image/svg+xml,"+encodeURIComponent("<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍸</text><circle cx='78' cy='22' r='20' fill='#e0243f' stroke='white' stroke-width='6'/></svg>"):ic.dataset.base}
+}
+function onChatUpdate(){
   const seen=+store.get("chatSeen")||0,me=chatName().toLowerCase();
-  const onChat=!$("tab-chat").hidden;
-  if(onChat&&!document.hidden){markRead()}
-  else{const n=chat.filter(m=>m.ts>seen&&m.name.toLowerCase()!==me).length;$("chatBadge").hidden=!n;$("chatBadge").textContent=n>9?"9+":n}
-  const newest=chat[chat.length-1];
-  if(chatReady&&chat.length>prevLen&&newest&&newest.name.toLowerCase()!==me&&!onChat){try{navigator.vibrate&&navigator.vibrate(newest.announce?[120,80,120]:80)}catch(e){}}
+  const onChat=!$("tab-chat").hidden&&!document.hidden;
+  if(!chatAllowed()){setUnread(0);chatReady=true;return}
+  if(onChat){markRead()}
+  else setUnread(chat.filter(m=>m.ts>seen&&!isMine(m,me)).length);
+  const fresh=chat.filter(m=>m.ts>lastPopTs&&!isMine(m,me));
+  const newest=fresh[fresh.length-1];
+  if(chatReady&&newest&&!onChat){
+    try{navigator.vibrate&&navigator.vibrate(newest.announce?[120,80,120]:80)}catch(e){}
+    const pop=$("chatPop");
+    pop.innerHTML=`<b>💬 ${esc(newest.name)}</b><span>${esc(newest.text.length>80?newest.text.slice(0,80)+"…":newest.text)}</span>`;
+    pop.classList.toggle("ann",!!newest.announce);pop.hidden=false;
+    clearTimeout(onChatUpdate._t);onChatUpdate._t=setTimeout(()=>pop.hidden=true,6000);
+  }
+  if(chat.length)lastPopTs=Math.max(lastPopTs,chat[chat.length-1].ts);
   chatReady=true;
 }
 function renderChat(){
@@ -978,6 +1009,7 @@ function renderChat(){
   if(ann)$("announce").innerHTML=`<div class="sm">📢 Kunngjøring fra ${esc(ann.name)} · ${hm(ann.ts)}</div><div class="tx">${esc(ann.text)}</div>`;
   $("chatNameRow").hidden=!!$("runnerName").value.trim();
 }
+$("chatPop").onclick=()=>{$("chatPop").hidden=true;const b=document.querySelector('nav.tabs [data-tab="chat"]');if(b&&!b.hidden)b.click()};
 $("chatLog").addEventListener("click",async e=>{const b=e.target.closest("[data-rmmsg]");if(!b||!isAdmin)return;
   if(await ask("Slette meldingen?","Slett"))del("chat",b.dataset.rmmsg,"Melding slettet")});
 function updateChatTab(){applyRoles()}
