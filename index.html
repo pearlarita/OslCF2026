@@ -300,7 +300,7 @@ details summary{color:var(--muted);cursor:pointer;font-weight:600}
     <h1>Barlogistikk<small>Oslo Cocktailfestival – barer og backrunners</small></h1>
     <div class="hdr-r">
       <span class="live" id="live">Kobler til…</span>
-      <div class="hdr-btns"><button class="langbtn" id="langBtn" type="button">EN</button>
+      <div class="hdr-btns"><button class="langbtn" id="roleBtn" type="button" aria-label="Bytt rolle" title="Bytt rolle" hidden></button><button class="langbtn" id="langBtn" type="button">EN</button>
       <button class="gear" id="gear" aria-label="Admin" aria-pressed="false" title="Admin" hidden>⚙️</button></div>
     </div>
   </header>
@@ -512,6 +512,7 @@ details summary{color:var(--muted);cursor:pointer;font-weight:600}
         <input type="password" id="pin1" inputmode="numeric" autocomplete="off" placeholder="PIN-kode" class="pin">
         <button class="btn big" id="pinGo">Logg inn</button>
         <p id="pinMsg" style="margin:10px 0 0;min-height:1.4em"></p>
+        <button class="btn ghost sm" id="lockBack" type="button" style="margin-top:6px">← Tilbake</button>
       </div>
     </div>
     <div id="adminBody" hidden>
@@ -579,7 +580,7 @@ const LOCALE=()=>LANG==="en"?"en-GB":"nb-NO";
 const EXACT=new Map(Object.entries({
 "Admin":"Admin","Akkurat nå på gulvet":"On the floor right now","Alle aktive bestillinger":"All active orders","Antall":"Quantity",
 "Bare fra mitt område":"Only from my area","Barer":"Bars","Barlogistikk":"Bar Logistics","Beskjed til runner (valgfritt)":"Note for the runner (optional)",
-"Bestill is, glass, varer og hjelp":"Order ice, glasses, supplies and help","Bilde (valgfritt)":"Photo (optional)","Bytt":"Switch","Bytt bar":"Switch bar",
+"Bestill is, glass, varer og hjelp":"Order ice, glasses, supplies and help","Bilde (valgfritt)":"Photo (optional)","Bytt":"Switch","Bytt bar":"Switch bar","Bytt rolle":"Switch role",
 "Dag":"Day","Får ikke kontakt med serveren. Sjekk nettet – prøver igjen automatisk.":"Can't reach the server. Check your connection – retrying automatically.",
 "Deres bestillinger":"Your orders","Detaljer (valgfritt)":"Details (optional)","Du bestiller som":"Ordering as","Du er logget inn som":"Logged in as","Endre":"Change",
 "Enhet (poser, kasser…)":"Unit (bags, crates…)","F.eks. 2. etasje":"E.g. 2nd floor","F.eks. Fyll is-kistene":"E.g. Refill the ice chests","F.eks. Himkok (Oslo)":"E.g. Himkok (Oslo)",
@@ -789,14 +790,14 @@ async function pinSubmit(){
   $("pinGo").disabled=true;
   try{
     const r=await API.call("login",{pin:a});
-    store.set("adminToken",r.token);store.set("adminUntil",String(r.exp));toast("Logget inn");
+    chosen=true;store.set("adminToken",r.token);store.set("adminUntil",String(r.exp));toast("Logget inn");
   }catch(e){msg.textContent=e.code==="rate"?"Prøv igjen om litt":e.code==="pin"?"Feil kode, prøv igjen":"Noe gikk galt"}
   $("pinGo").disabled=false;
   $("pin1").value="";renderAdminLock();applyRoles();
 }
 $("pinGo").onclick=pinSubmit;
 ["pin1"].forEach(id=>$(id).addEventListener("keydown",e=>{if(e.key==="Enter")pinSubmit()}));
-$("adminLockBtn").onclick=()=>{store.set("adminUntil","0");store.set("adminToken","");pinMode="unlock";renderAdminLock();applyRoles();toast("Logget ut")};
+$("adminLockBtn").onclick=()=>{chosen=false;curTab="";store.set("adminUntil","0");store.set("adminToken","");pinMode="unlock";renderAdminLock();applyRoles();toast("Logget ut")};
 
 /* Roller: bar ser bare Bar, runner ser Min vakt → Chat, admin (innlogget med PIN) ser alt */
 const ALL_TABS=["start","bar","runner","plan","overview","chat","admin"];
@@ -823,6 +824,10 @@ let chosen=false; // man velger Bar/Runner hver gang siden åpnes
 function applyRoles(){
   const ok=allowedTabs();
   $("gear").hidden=!isAdmin;
+  // Rolleknapp i toppen: tilbake til «Hvem er du?»
+  const rb=$("roleBtn"),r=store.get("role");
+  rb.hidden=!chosen||curTab==="start";
+  rb.textContent=r==="bar"?"🍸 ⇄":r==="runner"?"🏃 ⇄":"⇄";
   if(!chosen&&curTab!=="admin"){
     document.querySelector("nav.tabs").hidden=true;
     if(curTab!=="start")showTab("start");
@@ -839,6 +844,8 @@ function renderStartHints(){
   const b=store.get("bar"),r=store.get("runner");
   document.querySelectorAll(".rolepick [data-last]").forEach(el=>{const v=el.dataset.last==="bar"?b:r;el.textContent=v?"↻ "+v:"";el.hidden=!v});
 }
+$("roleBtn").onclick=()=>{chosen=false;curTab="";applyRoles();window.scrollTo({top:0})};
+$("lockBack").onclick=()=>{curTab="";applyRoles();window.scrollTo({top:0})};
 function setRole(r){chosen=!!r;store.set("role",r);if(r){store.set("tab",r);showTab(r)}applyRoles();render();window.scrollTo({top:0})}
 document.querySelectorAll("nav.tabs button").forEach(b=>b.onclick=()=>showTab(b.dataset.tab));
 document.addEventListener("click",e=>{const b=e.target.closest("[data-role]");if(b)setRole(b.dataset.role)});
