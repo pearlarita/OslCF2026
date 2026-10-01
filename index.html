@@ -190,6 +190,7 @@ body.wide .wrap{max-width:1180px}
 /* Admin gear */
 .hdr-r{display:flex;flex-direction:column;align-items:flex-end;gap:8px;align-self:flex-start}
 .hdr-r .live{order:2}
+.hdr-r .ver{order:3;font-size:11px;color:var(--muted);opacity:.7}
 .gear{width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:var(--panel);font-size:20px;line-height:1;padding:0}
 .gear[aria-pressed="true"]{background:var(--ink);border-color:var(--ink)}
 
@@ -308,6 +309,7 @@ details summary{color:var(--muted);cursor:pointer;font-weight:600}
     <h1>Barlogistikk<small>Oslo Cocktailfestival – barer og backrunners</small></h1>
     <div class="hdr-r">
       <span class="live" id="live">Kobler til…</span>
+      <span class="ver" title="Versjon">v1.8</span>
       <div class="hdr-btns"><button class="langbtn" id="roleBtn" type="button" aria-label="Bytt rolle" title="Bytt rolle" hidden></button><button class="langbtn" id="langBtn" type="button">EN</button>
       <button class="gear" id="gear" aria-label="Admin" aria-pressed="false" title="Admin" hidden>⚙️</button></div>
     </div>
@@ -318,7 +320,7 @@ details summary{color:var(--muted);cursor:pointer;font-weight:600}
     <button role="tab" data-tab="runner" aria-selected="false"><span>🏃</span>Min vakt</button>
     <button role="tab" data-tab="plan" aria-selected="false" hidden><span>🗺️</span>Vaktplan</button>
     <button role="tab" data-tab="overview" aria-selected="false"><span>📋</span>Oversikt</button>
-    <button role="tab" data-tab="chat" aria-selected="false"><span>💬</span>Chat<i class="badge" id="chatBadge" hidden></i></button>
+    <button role="tab" data-tab="chat" aria-selected="false"><span id="chatIcon">💬</span>Chat<i class="badge" id="chatBadge" hidden></i></button>
   </nav>
 
   <div class="banner" id="offline">Får ikke kontakt med serveren. Sjekk nettet – prøver igjen automatisk.</div>
@@ -485,6 +487,17 @@ details summary{color:var(--muted);cursor:pointer;font-weight:600}
         <div><label class="f" for="tkTime">Fra</label><input type="time" id="tkTime" value="19:00"></div>
         <div><label class="f" for="tkEnd">Til</label><input type="time" id="tkEnd" value="19:30"></div>
       </div>
+      <div class="row">
+        <div><label class="f" for="tkRepeat">Gjentas</label><select id="tkRepeat">
+          <option value="0">Nei</option><option value="15">Hvert 15. minutt</option><option value="30">Hvert 30. minutt</option>
+          <option value="60">Hver time</option><option value="120">Hver 2. time</option><option value="custom">Annet…</option></select></div>
+        <div id="tkUntilBox" hidden><label class="f" for="tkUntil">Gjenta til</label><input type="time" id="tkUntil" value="22:00"></div>
+      </div>
+      <div class="row" id="tkCustomBox" hidden>
+        <div><label class="f" for="tkEvery">Hvert</label><input type="number" id="tkEvery" min="5" max="720" value="45" inputmode="numeric"></div>
+        <div><label class="f" for="tkUnit">Enhet</label><select id="tkUnit"><option value="1">minutt</option><option value="60">time</option></select></div>
+      </div>
+      <p class="calhint" id="tkPreview" hidden></p>
       <label class="f" for="tkNote">Detaljer (valgfritt)</label>
       <input type="text" id="tkNote" placeholder="F.eks. is ligger i kjølerom B">
       <button class="btn big" id="addTask">Legg inn oppgave</button>
@@ -589,7 +602,7 @@ const LOCALE=()=>LANG==="en"?"en-GB":"nb-NO";
 const EXACT=new Map(Object.entries({
 "Admin":"Admin","Akkurat nå på gulvet":"On the floor right now","Alle aktive bestillinger":"All active orders","Antall":"Quantity",
 "Bare fra mitt område":"Only from my area","Barer":"Bars","Barlogistikk":"Bar Logistics","Beskjed til runner (valgfritt)":"Note for the runner (optional)",
-"Bestill is, glass, varer og hjelp":"Order ice, glasses, supplies and help","Bilde (valgfritt)":"Photo (optional)","Bytt":"Switch","Bytt bar":"Switch bar","Bytt rolle":"Switch role",
+"Bestill is, glass, varer og hjelp":"Order ice, glasses, supplies and help","Bilde (valgfritt)":"Photo (optional)","Bytt":"Switch","Bytt bar":"Switch bar","Gjentas":"Repeats","Nei":"No","Hvert 15. minutt":"Every 15 minutes","Hvert 30. minutt":"Every 30 minutes","Hver time":"Every hour","Hver 2. time":"Every 2 hours","Annet…":"Other…","Gjenta til":"Repeat until","Hvert":"Every","Enhet":"Unit","minutt":"minutes","time":"hours","Hele serien":"Whole series","Bare denne":"Just this one","Serien er slettet":"Series deleted","Bytt rolle":"Switch role",
 "Dag":"Day","Får ikke kontakt med serveren. Sjekk nettet – prøver igjen automatisk.":"Can't reach the server. Check your connection – retrying automatically.",
 "Deres bestillinger":"Your orders","Detaljer (valgfritt)":"Details (optional)","Du bestiller som":"Ordering as","Du er logget inn som":"Logged in as","Endre":"Change",
 "Enhet (poser, kasser…)":"Unit (bags, crates…)","F.eks. 2. etasje":"E.g. 2nd floor","F.eks. Fyll is-kistene":"E.g. Refill the ice chests","F.eks. Himkok (Oslo)":"E.g. Himkok (Oslo)",
@@ -644,6 +657,11 @@ const EXACT=new Map(Object.entries({
 "Barlogistikk – Oslo Cocktailfestival":"Bar Logistics – Oslo Cocktail Festival"
 }));
 const RX=[
+[/^til slutten av (.+) sin vakt$/,a=>`until the end of ${a}'s shift`],
+[/^til siste vakt i (.+) er ferdig$/,a=>`until the last shift in ${a} ends`],
+[/^Lager (\d+) oppgaver: (.+)$/,(a,b)=>`Creates ${a} tasks: ${b.replace(" (maks)"," (max)")}`],
+[/^(\d+) oppgaver lagt inn ✓$/,a=>`${a} tasks added ✓`],
+[/^Denne oppgaven gjentas \((\d+) ganger\)\. Hva vil du slette\?$/,a=>`This task repeats (${a} times). What do you want to delete?`],
 [/^(.+)\. Bestillingen er ikke sendt\.$/,a=>trCore(a)+". The order was not sent."],
 [/^(\d+) min siden$/,a=>a+" min ago"],
 [/^Logget inn som (.+)$/,a=>"Logged in as "+a],
@@ -757,14 +775,14 @@ let db=null,orders=[],bars=[],areas=[],shifts=[],tasks=[];
 let pickedItem="",qty=1,runnersDocs=[],selRunner="";
 
 /* Egen bekreftelsesboks (vanlige nettleser-dialoger er blokkert her) */
-function ask(msg,ok="Ja"){
+function ask(msg,ok="Ja",alt){
   return new Promise(res=>{
     const o=document.createElement("div");o.className="askov";
-    o.innerHTML=`<div class="askbox" role="alertdialog" aria-modal="true"><p></p><div class="row"><button class="btn ghost" data-a="0">Avbryt</button><button class="btn cherry" data-a="1"></button></div></div>`;
-    o.querySelector("p").textContent=msg;o.querySelector('[data-a="1"]').textContent=ok;
+    o.innerHTML=`<div class="askbox" role="alertdialog" aria-modal="true"><p></p><div class="row"><button class="btn ghost" data-a="0">Avbryt</button>${alt?'<button class="btn" data-a="2"></button>':""}<button class="btn cherry" data-a="1"></button></div></div>`;
+    o.querySelector("p").textContent=msg;o.querySelector('[data-a="1"]').textContent=ok;if(alt)o.querySelector('[data-a="2"]').textContent=alt;
     const done=v=>{o.remove();document.removeEventListener("keydown",key);res(v)};
     const key=e=>{if(e.key==="Escape")done(false)};
-    o.addEventListener("click",e=>{const b=e.target.closest("[data-a]");if(b)done(b.dataset.a==="1");else if(e.target===o)done(false)});
+    o.addEventListener("click",e=>{const b=e.target.closest("[data-a]");if(b)done(b.dataset.a==="1"?true:b.dataset.a==="2"?"alt":false);else if(e.target===o)done(false)});
     document.addEventListener("keydown",key);
     document.body.appendChild(o);o.querySelector('[data-a="1"]').focus();
   });
@@ -962,7 +980,7 @@ $("chatText").addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.isComposing)
 function markRead(){const last=chat.length?chat[chat.length-1].ts:Date.now();store.set("chatSeen",String(last));setUnread(0);const p=$("chatPop");if(p)p.hidden=true}
 let lastPopTs=0;
 // Egen id per nettleserfane, så meldinger fra en annen fane/telefon med samme navn også varsles
-const DEV=(()=>{try{let d=sessionStorage.getItem("dev");if(!d){d=Math.random().toString(36).slice(2,10);sessionStorage.setItem("dev",d)}return d}catch(e){return Math.random().toString(36).slice(2,10)}})();
+const DEV=Math.random().toString(36).slice(2,10); // ny for hver innlasting, også ved duplisert fane
 const isMine=(m,me)=>m.dev?m.dev===DEV:(me&&m.name.toLowerCase()===me);
 function chatAllowed(){return allowedTabs().includes("chat")}
 function setUnread(n){
@@ -1137,12 +1155,61 @@ $("addShift").onclick=async()=>{
   if(clash&&!await ask(`${runner} har allerede vakt ${hm(clash.start)}–${hm(clash.end)} i ${clash.area}. Legge til likevel?`))return;
   try{await db.collection("shifts").doc().set({runner,area,start,end,createdAt:Date.now()});toast(`${runner} satt på ${area} ✓`)}catch(e){toast("Kunne ikke lagre")}
 };
-$("addTask").onclick=async()=>{
-  const title=$("tkTitle").value.trim(),area=$("tkArea").value,day=$("tkDay").value,time=$("tkTime").value,endT=$("tkEnd").value;
-  if(!title||!area||!day||!time||!endT){toast("Fyll inn hva, hvor, fra og til");return}
+/* Gjentakende oppgaver: lager én oppgave per gang, fra første fra–til og fremover */
+const MAX_REPEAT=48;
+function repeatMinutes(){const v=$("tkRepeat").value;if(v==="custom")return Math.max(5,Math.round((+$("tkEvery").value||0)*(+$("tkUnit").value)));return +v}
+function taskSlots(){
+  const day=$("tkDay").value,time=$("tkTime").value,endT=$("tkEnd").value;
+  if(!day||!time||!endT)return [];
   const at=toTs(day,time);let end=toTs(day,endT);if(end<=at)end+=86400000;
-  try{await db.collection("tasks").doc().set({title,area,runner:$("tkWho").value,at,end,note:$("tkNote").value.trim(),done:false,createdAt:Date.now()});
-    $("tkTitle").value="";$("tkNote").value="";toast("Oppgave lagt inn ✓")}catch(e){toast("Kunne ikke lagre")}
+  const every=repeatMinutes();if(!every)return [{at,end}];
+  let until=toTs(day,$("tkUntil").value||"23:59");if(until<at)until+=86400000;
+  until=Math.min(until,at+86400000-1); // maks ett døgn
+  const out=[],step=every*60000,len=end-at;
+  for(let t=at;(t===at||t+len<=until)&&out.length<MAX_REPEAT;t+=step)out.push({at:t,end:t+len}); // hver oppgave skal være ferdig innen «til»
+  return out;
+}
+// «Gjenta til» fylles automatisk med slutten på vakta, til man endrer den selv
+let untilDirty=false;
+function autoUntil(){
+  const day=$("tkDay").value,time=$("tkTime").value;if(!day||!time)return null;
+  const at=toTs(day,time),who=$("tkWho").value,area=$("tkArea").value;
+  const cover=shifts.filter(s=>s.start<=at&&at<s.end&&(who?same(s.runner,who):s.area===area));
+  if(!cover.length)return null;
+  return {end:Math.max(...cover.map(s=>s.end)),label:who?`til slutten av ${who} sin vakt`:`til siste vakt i ${area} er ferdig`};
+}
+function renderRepeatUI(){
+  const v=$("tkRepeat").value;
+  const au=v!=="0"&&!untilDirty?autoUntil():null;
+  if(au)$("tkUntil").value=hm(au.end);$("tkUntilBox").hidden=v==="0";$("tkCustomBox").hidden=v!=="custom";
+  const sl=taskSlots(),pv=$("tkPreview");
+  if(v==="0"||!sl.length){pv.hidden=true;return}
+  const times=sl.map(x=>hm(x.at));
+  pv.textContent=`Lager ${sl.length} oppgaver: ${times.length>6?times.slice(0,5).join(", ")+" … "+times[times.length-1]:times.join(", ")}`+(sl.length>=MAX_REPEAT?" (maks)":"")+(au?" · "+au.label:"");
+  pv.hidden=false;
+}
+["tkRepeat","tkUntil","tkEvery","tkUnit","tkTime","tkEnd","tkDay"].forEach(id=>$(id).addEventListener("input",renderRepeatUI));
+$("tkRepeat").addEventListener("change",renderRepeatUI);
+$("tkUntil").addEventListener("input",()=>{untilDirty=true});
+["tkWho","tkArea","tkDay","tkTime"].forEach(id=>$(id).addEventListener("change",()=>{untilDirty=false;renderRepeatUI()}));
+const genId=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,8);
+async function writeMany(col,docs){
+  if(db.batch){try{await db.batch(docs.map(d=>({op:"set",col,id:d.id,data:d.data})));return}catch(e){if(e.code!=="op")throw e}}
+  await Promise.all(docs.map(d=>db.collection(col).doc(d.id).set(d.data)));
+}
+$("addTask").onclick=async()=>{
+  const title=$("tkTitle").value.trim(),area=$("tkArea").value;
+  const slots=taskSlots();
+  if(!title||!area||!slots.length){toast("Fyll inn hva, hvor, fra og til");return}
+  const base={title,area,runner:$("tkWho").value,note:$("tkNote").value.trim(),done:false,createdAt:Date.now()};
+  const series=slots.length>1?genId():"";
+  const docs=slots.map((x,i)=>({id:genId()+i,data:{...base,at:x.at,end:x.end,...(series?{series,seriesN:slots.length}:{})}}));
+  $("addTask").disabled=true;
+  try{await writeMany("tasks",docs);
+    $("tkTitle").value="";$("tkNote").value="";$("tkRepeat").value="0";untilDirty=false;renderRepeatUI();
+    toast(docs.length>1?`${docs.length} oppgaver lagt inn ✓`:"Oppgave lagt inn ✓")}
+  catch(e){toast("Kunne ikke lagre")}
+  $("addTask").disabled=false;
 };
 $("tkArea").onchange=renderWhoSelect;
 $("tkDay").onchange=renderWhoSelect;$("tkTime").onchange=()=>{const [h,m]=$("tkTime").value.split(":").map(Number);if(!isNaN(h)){const e=(h*60+m+30)%1440;$("tkEnd").value=String(Math.floor(e/60)).padStart(2,"0")+":"+String(e%60).padStart(2,"0")}renderWhoSelect()};
@@ -1182,7 +1249,15 @@ document.body.addEventListener("click",async e=>{
   if(act==="taskdone")upd("tasks",id,{done:true,doneBy:me,doneAt:Date.now()},"Oppgave ferdig ✓");
   if(act==="taskundo")upd("tasks",id,{done:false,doneBy:""},"Oppgave åpnet igjen");
   if(["rmbar","rmarea"].includes(act)&&!adminMode()){toast("Bare admin kan gjøre dette");return}
-  if(act==="rmtask"&&await ask("Slette oppgaven?"))del("tasks",id,"Oppgave slettet");
+  if(act==="rmtask"){
+    const t=tasks.find(x=>x.id===id);
+    if(t&&t.series){
+      const all=tasks.filter(x=>x.series===t.series);
+      const r=await ask(`Denne oppgaven gjentas (${all.length} ganger). Hva vil du slette?`,"Hele serien","Bare denne");
+      if(r===true){if(db.batch){try{await db.batch(all.map(x=>({op:"delete",col:"tasks",id:x.id})));toast("Serien er slettet");}catch(e){if(e.code==="op"){for(const x of all)await del("tasks",x.id);toast("Serien er slettet")}else toast("Noe gikk galt")}}else{for(const x of all)await del("tasks",x.id);toast("Serien er slettet")}}
+      else if(r==="alt")del("tasks",id,"Oppgave slettet");
+    }else if(await ask("Slette oppgaven?"))del("tasks",id,"Oppgave slettet");
+  }
   if(act==="rmshift"&&await ask("Slette vakten?"))del("shifts",id,"Vakt slettet");
   if(act==="rmbar"&&await ask(`Fjerne ${name}?`))del("bars",id,"Bar fjernet");
   if(act==="rmarea"&&await ask(`Fjerne området ${name}? Barer og vakter blir liggende.`))del("areas",id,"Område fjernet");
@@ -1215,7 +1290,7 @@ function taskRow(t,acts){
   const who=t.runner?t.runner:"Alle i området";
   return `<div class="task ${t.done?"done":overdue?"overdue":soon?"soon":""}">
     <div class="t">${hm(t.at)}${t.end?`<small>–${hm(t.end)}</small>`:""}</div>
-    <div><div class="ttl">${esc(t.title)}</div>
+    <div><div class="ttl">${t.series?'<span title="Gjentas">🔁</span> ':""}${esc(t.title)}</div>
       <div class="sub">📍 ${esc(t.area)} · ${esc(who)}${t.done&&t.doneBy?` · ferdig av ${esc(t.doneBy)}`:""}${overdue?` · <span class="late">forsinket</span>`:active?` · <b>pågår nå</b>`:""}</div>
       ${t.note?`<div class="sub">💬 ${esc(t.note)}</div>`:""}</div>
     <div>${acts||""}</div></div>`;
@@ -1505,8 +1580,13 @@ function makeDb(onStatus){
     };
     return q;
   }
+  async function batch(writes){
+    writes.forEach(w=>{if(w.op==="delete")local(w.col).delete(w.id);else local(w.col).set(w.id,{...w.data})});emit();
+    try{await API.call("batch",{writes})}catch(e){if(e.code!=="op"){version=null;pull(true)}throw e}
+    version=null;setTimeout(()=>pull(true),150);
+  }
   pull(true);
-  return {collection:(c)=>query(c,null,null)};
+  return {collection:(c)=>query(c,null,null),batch};
 }
 const assetsApi={
   async upload(blob){
