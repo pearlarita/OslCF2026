@@ -1,0 +1,1487 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Barlogistikk – Oslo Cocktailfestival</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#e4eef0; --panel:#ffffff; --ink:#15283a; --muted:#5a6b78; --line:#c9d8dc;
+  --ice:#bfe0e6; --cherry:#c62a44; --cherry-soft:#fbe3e7; --lime:#6f9a1c; --lime-soft:#e7f2d2;
+  --amber:#b8740a; --amber-soft:#fbefd9;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0e1b25; --panel:#162836; --ink:#e6f0f3; --muted:#93a7b4; --line:#27404f;
+  --ice:#23495a; --cherry:#ff5a74; --cherry-soft:#3a1c25; --lime:#a6d24a; --lime-soft:#22341a;
+  --amber:#f0a93a; --amber-soft:#3a2c14;
+}}
+:root[data-theme="dark"]{
+  --bg:#0e1b25; --panel:#162836; --ink:#e6f0f3; --muted:#93a7b4; --line:#27404f;
+  --ice:#23495a; --cherry:#ff5a74; --cherry-soft:#3a1c25; --lime:#a6d24a; --lime-soft:#22341a;
+  --amber:#f0a93a; --amber-soft:#3a2c14;
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 Figtree,system-ui,-apple-system,"Segoe UI",sans-serif}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--cherry);outline-offset:2px}
+.wrap{max-width:760px;margin:0 auto;padding:16px}
+header{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin:8px 0 16px}
+h1{font-family:"Bricolage Grotesque",Figtree,sans-serif;font-weight:800;font-size:clamp(28px,7vw,44px);line-height:.95;margin:0;letter-spacing:-.02em}
+h1 small{display:block;font-weight:500;font-size:15px;color:var(--muted);letter-spacing:0;margin-top:6px}
+h2{font-family:"Bricolage Grotesque",Figtree,sans-serif;font-size:22px;margin:26px 0 10px}
+h3{font-family:"Bricolage Grotesque",Figtree,sans-serif;font-size:18px;margin:0 0 6px}
+.live{font-size:13px;color:var(--muted);white-space:nowrap}
+.live::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--muted);margin-right:6px}
+.live.on::before{background:var(--lime)}
+nav.tabs{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:4px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:5px;position:sticky;top:env(safe-area-inset-top,0px);z-index:5}
+nav.tabs button{border:0;background:transparent;padding:10px 2px;border-radius:10px;font-weight:600;font-size:14px;line-height:1.2}
+nav.tabs button span{display:block;font-size:20px}
+nav.tabs button[aria-selected="true"]{background:var(--ink);color:var(--bg)}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px;margin-top:14px}
+label.f{display:block;font-size:14px;color:var(--muted);margin:12px 0 6px;font-weight:600}
+input[type=text],input[type=date],input[type=time],select{width:100%;padding:12px;border:1px solid var(--line);border-radius:10px;background:var(--bg);min-height:48px}
+.row{display:flex;gap:8px;align-items:flex-end}
+.row > *{flex:1;min-width:0}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1px solid var(--line);background:var(--bg);padding:10px 14px;border-radius:999px;font-weight:600}
+.chip[aria-pressed="true"]{background:var(--ice);border-color:var(--ink)}
+.qty{display:flex;align-items:center;border:1px solid var(--line);border-radius:10px;overflow:hidden;flex:0 0 auto}
+.qty button{border:0;background:var(--bg);width:48px;height:48px;font-size:22px;font-weight:700}
+.qty span{min-width:48px;text-align:center;font-weight:700;font-size:18px}
+.check{display:flex;align-items:center;gap:10px;margin-top:14px;font-weight:600}
+.check input{width:22px;height:22px;accent-color:var(--cherry)}
+.btn{border:0;border-radius:12px;padding:14px 18px;font-weight:700;background:var(--ink);color:var(--bg)}
+.btn.big{width:100%;margin-top:16px;font-size:18px;padding:18px}
+.btn.sm{padding:8px 12px;font-size:14px;border-radius:10px}
+.btn.cherry{background:var(--cherry);color:#fff}
+.btn.lime{background:var(--lime);color:#fff}
+.btn.ghost{background:transparent;color:var(--muted);border:1px solid var(--line)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.list{display:flex;flex-direction:column;gap:10px;margin-top:10px}
+.ticket{background:var(--panel);border:1px solid var(--line);border-left:8px solid var(--ice);border-radius:12px;padding:14px;display:grid;grid-template-columns:1fr auto;gap:6px 12px;align-items:center}
+.ticket.urgent{border-left-color:var(--cherry)}
+.ticket.moving{border-left-color:var(--amber)}
+.ticket.done{border-left-color:var(--lime);opacity:.7}
+.ticket .what{font-family:"Bricolage Grotesque",Figtree,sans-serif;font-weight:700;font-size:20px;line-height:1.15}
+.ticket .where{font-weight:600}
+.ticket .where em{font-style:normal;color:var(--muted);font-weight:500}
+.ticket .meta{font-size:14px;color:var(--muted);grid-column:1/-1}
+.ticket .note{grid-column:1/-1;background:var(--bg);border-radius:8px;padding:8px 10px;font-size:15px}
+.ticket .acts{grid-row:1/3;grid-column:2;display:flex;flex-direction:column;gap:6px}
+.tag{display:inline-block;font-size:13px;font-weight:700;padding:2px 8px;border-radius:6px;margin-right:6px}
+.tag.urgent{background:var(--cherry-soft);color:var(--cherry)}
+.tag.ny{background:var(--ice);color:var(--ink)}
+.tag.moving{background:var(--amber-soft);color:var(--amber)}
+.tag.done{background:var(--lime-soft);color:var(--lime)}
+.late{color:var(--cherry);font-weight:700}
+.empty{color:var(--muted);text-align:center;padding:20px 12px;border:2px dashed var(--line);border-radius:12px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px}
+.stat b{display:block;font-family:"Bricolage Grotesque",Figtree,sans-serif;font-size:32px;line-height:1}
+.stat span{font-size:14px;color:var(--muted)}
+.table-wrap{overflow-x:auto;margin-top:10px}
+table{border-collapse:collapse;width:100%;min-width:420px;background:var(--panel);border-radius:12px;overflow:hidden}
+th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);font-size:15px;vertical-align:middle}
+th{color:var(--muted);font-weight:600}
+td select{min-height:40px;padding:8px}
+
+/* Floor board */
+.floors{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px;margin-top:10px}
+.floor{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px;border-top:6px solid var(--ice)}
+.floor.unstaffed{border-top-color:var(--cherry)}
+.floor.staffed{border-top-color:var(--lime)}
+.floor .who{font-weight:700;margin-top:6px}
+.floor .sub{font-size:14px;color:var(--muted)}
+.floor .bars{font-size:14px;margin-top:6px}
+
+/* Shift schedule */
+.day{margin-top:14px}
+.day > b{display:block;color:var(--muted);font-size:14px;margin-bottom:6px}
+.slot{display:grid;grid-template-columns:92px 1fr auto;gap:10px;align-items:center;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin-bottom:6px}
+.slot .t{font-weight:700;font-variant-numeric:tabular-nums}
+.slot.now{border-color:var(--lime);box-shadow:inset 4px 0 0 var(--lime)}
+
+/* Overview per area */
+.areas{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}
+.acard{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px;border-top:6px solid var(--line)}
+.acard.staffed{border-top-color:var(--lime)}
+.acard.unstaffed{border-top-color:var(--cherry)}
+.acard .hd{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.acard .run{font-size:14px;margin:4px 0 8px}
+.acard ul{list-style:none;margin:0;padding:0}
+.acard li{display:flex;justify-content:space-between;gap:8px;padding:7px 0;border-top:1px solid var(--line);font-size:15px}
+.acard li .c{display:flex;gap:4px;flex:0 0 auto}
+.acard li .c span{font-size:12px;font-weight:700;border-radius:6px;padding:1px 6px}
+.acard .tot{font-size:13px;color:var(--muted)}
+
+/* Runner roster */
+body.wide .wrap{max-width:1180px}
+.planlayout{display:grid;grid-template-columns:minmax(0,1fr);gap:16px}
+.planmain{min-width:0}
+.roster{margin-top:14px;min-width:0}
+.rhead{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.rlist{display:flex;gap:8px;overflow-x:auto;padding:10px 2px 4px;scroll-snap-type:x proximity}
+.rcard{flex:0 0 170px;scroll-snap-align:start;text-align:left;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px;border-left:6px solid var(--line)}
+.rcard.on{border-left-color:var(--lime)}
+.rcard.sel{border-color:var(--ink);box-shadow:0 0 0 2px var(--ink) inset}
+.rcard b{display:block;font-size:17px}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--line);margin-right:6px;vertical-align:1px}
+.dot.on{background:var(--lime)}
+.rcard .s1{font-size:13px;color:var(--muted);margin-top:2px}
+.rcard .s2{font-size:12px;color:var(--muted);margin-top:6px}
+.rdetail{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px;margin-top:12px}
+.rdetail .acts{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 4px}
+.rdetail h4{margin:14px 0 6px;font-size:14px;color:var(--muted)}
+.rdetail .slot{grid-template-columns:86px 1fr auto}
+@media (min-width:1000px){
+  .planlayout{grid-template-columns:minmax(0,1fr) 300px}
+  .roster{grid-column:2;grid-row:1;position:sticky;top:calc(80px + env(safe-area-inset-top,0px));align-self:start;max-height:calc(100vh - 100px);overflow-y:auto}
+  .planmain{grid-column:1;grid-row:1}
+  .rlist{flex-direction:column;overflow-x:visible}
+  .rcard{flex:none}
+}
+
+/* Bar name edit */
+.nameedit{min-height:40px!important;padding:8px 10px!important;font-weight:700;background:transparent!important;border-color:transparent!important}
+.nameedit:hover{border-color:var(--line)!important}
+.nameedit:focus{background:var(--bg)!important;border-color:var(--ink)!important}
+
+/* Role picker */
+.rolepick{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.rolepick button{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:22px 16px;text-align:left;min-height:150px}
+.rolepick button:hover{border-color:var(--ink)}
+.rolepick span{font-size:34px;display:block}
+.rolepick b{display:block;font-family:"Bricolage Grotesque",Figtree,sans-serif;font-size:24px;margin-top:6px}
+.rolepick small{display:block;color:var(--muted);font-size:14px;margin-top:4px}
+.backrole{margin-top:14px}
+.rolepick em{display:inline-block;margin-top:10px;font-style:normal;font-size:13px;font-weight:700;background:var(--ice);border-radius:999px;padding:3px 10px}
+@media (max-width:420px){.rolepick{grid-template-columns:1fr}.rolepick button{min-height:0}}
+
+/* Admin lock */
+.lockwrap{display:flex;justify-content:center;padding-top:24px}
+.lockcard{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:24px;max-width:360px;width:100%;text-align:center}
+.lockicon{font-size:40px}
+.pin{text-align:center;font-size:24px;letter-spacing:.3em;margin-top:8px}
+.adminbar{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;background:var(--lime-soft);border-radius:12px;padding:10px 12px;margin-top:14px;font-weight:600;font-size:14px}
+
+/* Language */
+.hdr-btns{display:flex;gap:8px;align-items:center}
+.langbtn{height:44px;min-width:44px;border-radius:22px;border:1px solid var(--line);background:var(--panel);font-weight:700;font-size:14px;padding:0 12px}
+
+/* Admin gear */
+.hdr-r{display:flex;flex-direction:column;align-items:flex-end;gap:8px;align-self:flex-start}
+.hdr-r .live{order:2}
+.gear{width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:var(--panel);font-size:20px;line-height:1;padding:0}
+.gear[aria-pressed="true"]{background:var(--ink);border-color:var(--ink)}
+
+/* Chat */
+.floorpill{display:inline-block;font-size:12px;font-weight:700;background:var(--lime-soft);color:var(--lime);border-radius:999px;padding:1px 8px;margin-left:4px;vertical-align:1px}
+nav.tabs button{position:relative}
+.badge{position:absolute;top:4px;right:6px;min-width:20px;height:20px;padding:0 6px;border-radius:10px;background:var(--cherry);color:#fff;font-style:normal;font-size:12px;font-weight:700;line-height:20px}
+.announce{background:var(--amber-soft);border:1px solid var(--amber);border-radius:14px;padding:12px 14px;margin-top:14px}
+.announce .sm{font-size:13px;color:var(--muted);font-weight:600}
+.announce .tx{font-weight:700;font-size:17px;margin-top:2px}
+.chatlog{display:flex;flex-direction:column;gap:6px;margin-top:14px;max-height:58vh;overflow-y:auto;padding:4px 2px}
+.msg{max-width:82%;align-self:flex-start;background:var(--panel);border:1px solid var(--line);border-radius:14px 14px 14px 4px;padding:8px 12px}
+.msg.mine{align-self:flex-end;background:var(--ice);border-color:transparent;border-radius:14px 14px 4px 14px}
+.msg.ann{align-self:stretch;max-width:none;background:var(--amber-soft);border-color:var(--amber);border-radius:12px}
+.msg .who{font-size:13px;font-weight:700}
+.msg .who span{font-weight:500;color:var(--muted)}
+.msg .tx{white-space:pre-wrap;word-wrap:break-word}
+.msg .rm{border:0;background:none;color:var(--muted);font-size:12px;padding:0;margin-left:6px;text-decoration:underline}
+.daysep{align-self:center;font-size:12px;color:var(--muted);margin:8px 0 2px}
+.composer{position:sticky;bottom:0;background:var(--bg);padding:10px 0 calc(10px + env(safe-area-inset-bottom,0px));margin-top:8px;border-top:1px solid var(--line)}
+.quick .chip{padding:8px 12px;font-size:14px}
+
+/* Delivery preference */
+.prefsum{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.prefsum .sm{font-size:13px;color:var(--muted);font-weight:600}
+#prefText{font-weight:700;font-size:17px}
+.ticket .deliv{font-size:14px;margin-top:2px}
+
+/* Photos */
+.photobtn{width:100%;border-style:dashed;min-height:56px;font-size:16px;color:var(--ink)}
+.photoprev{display:flex;align-items:center;gap:12px}
+.photoprev img{width:96px;height:96px;object-fit:cover;border-radius:12px;border:1px solid var(--line)}
+.ticket .pic{grid-column:1/-1;padding:0;border:0;background:none;text-align:left}
+.ticket .pic img{width:100%;max-height:220px;object-fit:cover;border-radius:10px;display:block;background:var(--bg)}
+.lightbox{position:fixed;inset:0;background:rgba(5,10,15,.92);z-index:30;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px;cursor:zoom-out}
+.lightbox img{max-width:100%;max-height:85vh;border-radius:10px}
+.lightbox p{color:#fff;opacity:.7;font-size:14px}
+
+/* Bar login */
+.barpick{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px}
+.barpick button{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px 14px;text-align:left;min-height:84px}
+.barpick button b{display:block;font-family:"Bricolage Grotesque",Figtree,sans-serif;font-size:19px;line-height:1.15}
+.barpick button span{display:block;font-size:13px;color:var(--muted);margin-top:4px}
+.barpick button:hover{border-color:var(--ink)}
+.barme{display:flex;justify-content:space-between;align-items:center;gap:12px;background:var(--ink);color:var(--bg);border-radius:16px;padding:16px 18px;margin-top:14px}
+.barme .nm{font-family:"Bricolage Grotesque",Figtree,sans-serif;font-size:26px;font-weight:800;line-height:1.05}
+.barme .sm{font-size:14px;opacity:.8}
+.barme .btn.ghost{color:var(--bg);border-color:currentColor;flex:0 0 auto}
+
+/* Calendar */
+.viewtoggle{display:inline-flex;gap:4px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:4px}
+.viewtoggle button{border:0;background:transparent;padding:8px 14px;border-radius:9px;font-weight:600}
+.viewtoggle button[aria-selected="true"]{background:var(--ink);color:var(--bg)}
+.calnav{display:flex;gap:6px;align-items:center;margin-top:12px}
+.calnav input{flex:1;min-width:0}
+.calnav .btn{flex:0 0 auto;min-height:48px;min-width:48px;font-size:18px}
+.calnav #calToday{font-size:14px}
+.calhint{font-size:14px;color:var(--muted);margin:8px 0 0}
+.cal-scroll{overflow:auto;max-height:70vh;margin-top:10px;border:1px solid var(--line);border-radius:14px;background:var(--panel)}
+.cal{display:grid;position:relative}
+.cal .corner,.cal .colhead{position:sticky;top:0;z-index:3;background:var(--panel);border-bottom:1px solid var(--line);padding:10px 8px;font-weight:700;font-size:14px}
+.cal .corner{left:0;z-index:4}
+.cal .colhead{text-align:center;border-left:1px solid var(--line)}
+.cal .colhead small{display:block;font-weight:500;color:var(--muted);font-size:12px}
+.cal .colhead.unstaffed small{color:var(--cherry)}
+.cal .hours{position:sticky;left:0;z-index:2;background:var(--panel)}
+.cal .hour{height:var(--hp);font-size:12px;color:var(--muted);text-align:right;padding:2px 6px 0 0;font-variant-numeric:tabular-nums;border-top:1px solid var(--line)}
+.cal .col{position:relative;border-left:1px solid var(--line);cursor:copy;
+  background-image:repeating-linear-gradient(to bottom,var(--line) 0 1px,transparent 1px var(--hp))}
+.cal .blk{position:absolute;border-radius:9px;padding:6px 7px;font-size:13px;line-height:1.2;overflow:hidden;cursor:pointer;border:0;text-align:left;color:#0f1d29;
+  border-left:5px solid rgba(0,0,0,.35)}
+.cal .blk b{display:block;font-size:14px}
+.cal .blk.me{outline:3px solid var(--ink);outline-offset:1px}
+.cal .tmark{position:absolute;left:2px;right:2px;height:22px;margin-top:-11px;background:var(--panel);border:1px dashed var(--muted);border-radius:6px;font-size:12px;padding:2px 6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;z-index:1;pointer-events:none}
+.cal .tmark.done{opacity:.5;text-decoration:line-through}
+.cal .nowline{position:absolute;left:0;right:0;height:2px;background:var(--cherry);z-index:2;pointer-events:none}
+.cal .nowline::before{content:"";position:absolute;left:-4px;top:-4px;width:10px;height:10px;border-radius:50%;background:var(--cherry)}
+.cal .empty-cal{padding:24px;color:var(--muted)}
+
+/* Runner's shift card */
+.shiftnow{background:var(--ink);color:var(--bg);border-radius:16px;padding:18px;margin-top:14px}
+.shiftnow .big{font-family:"Bricolage Grotesque",Figtree,sans-serif;font-size:30px;font-weight:800;line-height:1.05}
+.shiftnow .sm{opacity:.8;margin-top:4px}
+.task{display:grid;grid-template-columns:64px 1fr auto;gap:10px;align-items:center;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px}
+.task .t{font-weight:800;font-size:18px;font-variant-numeric:tabular-nums;line-height:1.1}
+.task .t small{display:block;font-size:14px;font-weight:600;color:var(--muted)}
+.task.overdue{border-color:var(--cherry);box-shadow:inset 4px 0 0 var(--cherry)}
+.task.soon{box-shadow:inset 4px 0 0 var(--amber)}
+.task.done{opacity:.55}
+.task.done .ttl{text-decoration:line-through}
+.task .ttl{font-weight:700}
+.task .sub{font-size:14px;color:var(--muted)}
+
+.askov{position:fixed;inset:0;background:rgba(10,20,30,.55);display:flex;align-items:center;justify-content:center;padding:20px;z-index:20}
+.askbox{background:var(--panel);color:var(--ink);border-radius:16px;padding:20px;max-width:380px;width:100%}
+.askbox p{margin:0 0 16px;font-size:17px;white-space:pre-line}
+.askbox .row{align-items:stretch}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(20px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--bg);padding:12px 18px;border-radius:12px;font-weight:600;opacity:0;pointer-events:none;transition:opacity .2s;z-index:10}
+.toast.show{opacity:1}
+.banner{background:var(--amber-soft);color:var(--ink);border:1px solid var(--amber);border-radius:12px;padding:12px 14px;margin-top:12px;display:none}
+details summary{color:var(--muted);cursor:pointer;font-weight:600}
+[hidden]{display:none!important}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Barlogistikk<small>Oslo Cocktailfestival – barer og backrunners</small></h1>
+    <div class="hdr-r">
+      <span class="live" id="live">Kobler til…</span>
+      <div class="hdr-btns"><button class="langbtn" id="langBtn" type="button">EN</button>
+      <button class="gear" id="gear" aria-label="Admin" aria-pressed="false" title="Admin" hidden>⚙️</button></div>
+    </div>
+  </header>
+
+  <nav class="tabs" role="tablist">
+    <button role="tab" data-tab="bar" aria-selected="true"><span>🍸</span>Bar</button>
+    <button role="tab" data-tab="runner" aria-selected="false"><span>🏃</span>Min vakt</button>
+    <button role="tab" data-tab="plan" aria-selected="false" hidden><span>🗺️</span>Vaktplan</button>
+    <button role="tab" data-tab="overview" aria-selected="false"><span>📋</span>Oversikt</button>
+    <button role="tab" data-tab="chat" aria-selected="false"><span>💬</span>Chat<i class="badge" id="chatBadge" hidden></i></button>
+  </nav>
+
+  <div class="banner" id="offline">Får ikke kontakt med serveren. Sjekk nettet – prøver igjen automatisk.</div>
+
+  <!-- BAR -->
+  <section id="tab-start" hidden>
+    <h2 style="margin-top:18px">Hvem er du?</h2>
+    <p style="margin:0 0 12px;color:var(--muted)">Velg én gang – telefonen husker det.</p>
+    <div class="rolepick">
+      <button data-role="bar"><span>🍸</span><b>Bar</b><small>Bestill is, glass, varer og hjelp</small><em data-last="bar" hidden></em></button>
+      <button data-role="runner"><span>🏃</span><b>Runner</b><small>Se vakten din, ta bestillinger og chat</small><em data-last="runner" hidden></em></button>
+    </div>
+  </section>
+
+  <section id="tab-bar">
+    <input type="hidden" id="barSelect">
+    <div id="barLogin">
+      <h2 style="margin-top:18px">Hvilken bar er du?</h2>
+      <p style="margin:0 0 12px;color:var(--muted)">Velg én gang – telefonen husker det til neste gang.</p>
+      <div class="barpick" id="barPick"></div>
+      <button class="btn ghost sm backrole" data-role="" type="button">← Tilbake</button>
+    </div>
+    <div id="barSession" hidden>
+    <div class="barme">
+      <div><div class="sm">Du bestiller som</div><div class="nm" id="barMeName"></div><div class="sm" id="barRunnerInfo"></div></div>
+      <button class="btn ghost sm" id="barLogout">Bytt bar</button>
+    </div>
+    <div class="card" id="prefCard">
+      <div id="prefSummary" class="prefsum" hidden>
+        <div><div class="sm">Levering til dere</div><div id="prefText"></div></div>
+        <button class="btn ghost sm" id="prefEdit" type="button">Endre</button>
+      </div>
+      <div id="prefForm">
+        <h3>Hvordan vil dere motta ting?</h3>
+        <p class="calhint" style="margin:0 0 10px">Velg én gang. Runnerne ser dette på alle bestillingene deres.</p>
+        <div class="chips" id="prefChips"></div>
+        <label class="f" for="prefDetail">Detaljer (valgfritt)</label>
+        <input type="text" id="prefDetail" placeholder="F.eks. bakdøra ved kjøkkenet, spør etter Kari">
+        <button class="btn big" id="prefSave" type="button">Lagre</button>
+      </div>
+    </div>
+    <div class="card">
+      <label class="f" style="margin-top:0">Hva trenger dere?</label>
+      <div class="chips" id="items"></div>
+      <div id="glassBox" hidden>
+        <label class="f">Hvilke glass?</label>
+        <div class="chips" id="glassTypes"></div>
+      </div>
+      <input type="text" id="customItem" placeholder="Noe annet? Skriv her" style="margin-top:10px">
+      <label class="f">Antall</label>
+      <div class="row" style="align-items:center">
+        <div class="qty"><button id="qMinus" aria-label="Færre">−</button><span id="qVal">1</span><button id="qPlus" aria-label="Flere">+</button></div>
+        <input type="text" id="unit" placeholder="Enhet (poser, kasser…)">
+      </div>
+      <label class="f" for="note">Beskjed til runner (valgfritt)</label>
+      <input type="text" id="note" placeholder="F.eks. lever bak disken">
+      <div id="photoBox" hidden>
+        <label class="f">Bilde (valgfritt)</label>
+        <input type="file" id="photoInput" accept="image/*" capture="environment" hidden>
+        <button class="btn ghost photobtn" id="photoBtn" type="button">📷 Ta bilde av det dere mangler</button>
+        <div class="photoprev" id="photoPrev" hidden><img id="photoImg" alt="Forhåndsvisning"><button class="btn ghost sm" id="photoRm" type="button">Fjern bilde</button></div>
+        <p class="calhint" style="margin-top:6px">Tips: ta bilde av varen, ikke av gjester.</p>
+      </div>
+      <label class="check"><input type="checkbox" id="urgent"> Haster – vi er tomme</label>
+      <button class="btn big" id="send" disabled>Send bestilling</button>
+    </div>
+
+    <h2>Deres bestillinger</h2>
+    <div class="list" id="barOrders"></div>
+    </div>
+  </section>
+
+  <!-- RUNNER: MIN VAKT -->
+  <section id="tab-runner" hidden>
+    <input type="hidden" id="runnerName">
+    <div id="runLogin">
+      <h2 style="margin-top:18px">Hvem er du?</h2>
+      <p style="margin:0 0 12px;color:var(--muted)">Trykk på navnet ditt. Telefonen husker det.</p>
+      <div class="barpick" id="runPick"></div>
+      <p class="calhint" style="margin-top:12px">Står du ikke på lista? Si fra til en admin, så legger de deg til.</p>
+      <button class="btn ghost sm backrole" data-role="" type="button">← Tilbake</button>
+    </div>
+    <div id="runSession" hidden>
+    <div class="barme">
+      <div><div class="sm">Du er logget inn som</div><div class="nm" id="runMeName"></div></div>
+      <button class="btn ghost sm" id="runLogout">Bytt</button>
+    </div>
+    <div id="shiftNow"></div>
+
+    <h2>Oppgaver</h2>
+    <div class="list" id="myTasks"></div>
+
+    <h2>Mine leveringer</h2>
+    <div class="list" id="myRuns"></div>
+
+    <h2>Ledige bestillinger</h2>
+    <label class="check" style="margin-top:0"><input type="checkbox" id="onlyMine" checked> Bare fra mitt område</label>
+    <div class="list" id="openOrders"></div>
+
+    <h2>Mine vakter</h2>
+    <div id="myShifts"></div>
+    </div>
+  </section>
+
+  <!-- CHAT -->
+  <section id="tab-chat" hidden>
+    <div class="announce" id="announce" hidden></div>
+    <div class="chatlog" id="chatLog" aria-live="polite"></div>
+    <div class="composer">
+      <div id="chatNameRow" hidden class="banner" style="display:block;margin:0 0 8px">Velg navnet ditt under <b>Min vakt</b> først. <button class="btn sm" id="chatGoLogin" type="button" style="margin-left:6px">Gå dit</button></div>
+      <div class="chips quick" id="quick"></div>
+      <div class="row" style="align-items:stretch;margin-top:8px">
+        <input type="text" id="chatText" placeholder="Skriv en melding…" maxlength="500" enterkeyhint="send">
+        <button class="btn" id="chatSend" style="flex:0 0 auto">Send</button>
+      </div>
+      <label class="check admin-only" hidden style="margin-top:10px"><input type="checkbox" id="chatAnnounce"> 📢 Send som kunngjøring (festes øverst)</label>
+    </div>
+  </section>
+
+  <!-- VAKTPLAN -->
+  <section id="tab-plan" hidden>
+  <div class="planlayout">
+    <aside class="roster" aria-label="Runnere">
+      <div class="rhead"><h2 style="margin:0">Runnere</h2><span class="calhint" id="rosterCount" style="margin:0"></span></div>
+      <div class="rlist" id="rosterList"></div>
+      <div class="row admin-only" style="margin-top:10px" hidden>
+        <input type="text" id="newRunner" placeholder="Ny runner">
+        <button class="btn" id="addRunner" style="flex:0 0 auto">Legg til</button>
+      </div>
+      <div id="rosterDetail"></div>
+    </aside>
+    <div class="planmain">
+    <h2 style="margin-top:14px">Akkurat nå på gulvet</h2>
+    <div class="floors" id="floorBoard"></div>
+
+
+    <h2>Vakter</h2>
+    <div class="viewtoggle" role="tablist">
+      <button data-view="cal" aria-selected="true">📅 Kalender</button>
+      <button data-view="list" aria-selected="false">☰ Liste</button>
+    </div>
+    <div id="calWrap">
+      <div class="calnav">
+        <button class="btn ghost sm" id="calPrev" aria-label="Forrige dag">‹</button>
+        <input type="date" id="calDay">
+        <button class="btn ghost sm" id="calNext" aria-label="Neste dag">›</button>
+        <button class="btn ghost sm" id="calToday">I dag</button>
+      </div>
+      <p class="calhint">Trykk på en tom rute for å sette opp en vakt der.</p>
+      <div class="cal-scroll"><div id="cal"></div></div>
+    </div>
+    <div id="allShifts" hidden></div>
+
+    <h2>Legg inn oppgave</h2>
+    <div class="card" style="margin-top:0">
+      <label class="f" for="tkTitle" style="margin-top:0">Hva skal gjøres?</label>
+      <input type="text" id="tkTitle" placeholder="F.eks. Fyll is-kistene">
+      <div class="row">
+        <div><label class="f" for="tkArea">Hvor</label><select id="tkArea"></select></div>
+        <div><label class="f" for="tkWho">Hvem</label><select id="tkWho"></select></div>
+      </div>
+      <div class="row">
+        <div><label class="f" for="tkDay">Dag</label><input type="date" id="tkDay"></div>
+        <div><label class="f" for="tkTime">Fra</label><input type="time" id="tkTime" value="19:00"></div>
+        <div><label class="f" for="tkEnd">Til</label><input type="time" id="tkEnd" value="19:30"></div>
+      </div>
+      <label class="f" for="tkNote">Detaljer (valgfritt)</label>
+      <input type="text" id="tkNote" placeholder="F.eks. is ligger i kjølerom B">
+      <button class="btn big" id="addTask">Legg inn oppgave</button>
+    </div>
+    <div class="list" id="allTasks"></div>
+
+    <h2>Sett opp vakt</h2>
+    <div class="card" style="margin-top:0">
+      <div class="row">
+        <div><label class="f" for="shRunner" style="margin-top:0">Runner</label><input type="text" id="shRunner" list="runnerList" placeholder="Navn"></div>
+        <div><label class="f" for="shArea" style="margin-top:0">Område</label><select id="shArea"></select></div>
+      </div>
+      <label class="f" for="shDay">Dag</label>
+      <input type="date" id="shDay">
+      <div class="row">
+        <div><label class="f" for="shFrom">Fra</label><input type="time" id="shFrom" value="18:00"></div>
+        <div><label class="f" for="shTo">Til</label><input type="time" id="shTo" value="22:00"></div>
+      </div>
+      <button class="btn big" id="addShift">Legg til vakt</button>
+    </div>
+
+
+    </div>
+  </div>
+  </section>
+
+  <!-- ADMIN -->
+  <section id="tab-admin" hidden>
+    <div id="adminLock" class="lockwrap">
+      <div class="lockcard">
+                <h2 id="lockTitle" style="margin:0 0 4px">Admin</h2>
+        <p id="lockSub" style="margin:0 0 14px;color:var(--muted)">Logg inn med PIN-kode.</p>
+        <input type="password" id="pin1" inputmode="numeric" autocomplete="off" placeholder="PIN-kode" class="pin">
+        <button class="btn big" id="pinGo">Logg inn</button>
+        <p id="pinMsg" style="margin:10px 0 0;min-height:1.4em"></p>
+      </div>
+    </div>
+    <div id="adminBody" hidden>
+    <div class="adminbar">
+      <span>Innlogget som admin</span>
+      <span><button class="btn sm" id="adminLockBtn">Logg ut</button></span>
+    </div>
+    <h2 style="margin-top:18px">Barer</h2>
+    <div class="card" style="margin-top:0">
+      <div class="row">
+        <div><label class="f" for="newBar" style="margin-top:0">Ny bar</label><input type="text" id="newBar" placeholder="F.eks. Himkok (Oslo)"></div>
+        <div><label class="f" for="newBarArea" style="margin-top:0">Område</label><select id="newBarArea"></select></div>
+      </div>
+      <button class="btn big" id="addBar" style="margin-top:10px">Legg til bar</button>
+    </div>
+    <p class="calhint" style="margin-top:14px">Trykk på et navn for å endre det. Velg område for å flytte baren.</p>
+    <div class="table-wrap"><table><thead><tr><th>Navn</th><th>Område</th><th></th></tr></thead><tbody id="barTable"></tbody></table></div>
+
+    <h2>Områder</h2>
+    <div class="card" style="margin-top:0">
+      <div class="row">
+        <div><label class="f" for="newArea" style="margin-top:0">Nytt område / etasje</label><input type="text" id="newArea" placeholder="F.eks. 2. etasje"></div>
+        <button class="btn" id="addArea" style="flex:0 0 auto">Legg til</button>
+      </div>
+    </div>
+    <div class="list" id="areaList"></div>
+    </div>
+  </section>
+
+  <!-- OVERVIEW -->
+  <section id="tab-overview" hidden>
+    <div class="stats" style="margin-top:14px">
+      <div class="stat"><b id="sNy">0</b><span>venter</span></div>
+      <div class="stat"><b id="sMove">0</b><span>på vei</span></div>
+      <div class="stat"><b id="sDone">0</b><span>levert</span></div>
+    </div>
+    <h2>Per bar</h2>
+    <div class="table-wrap"><table><thead><tr><th>Bar</th><th>Område</th><th>Venter</th><th>På vei</th><th>Levert</th></tr></thead><tbody id="perBar"></tbody></table></div>
+    <h2>Per område</h2>
+    <div class="areas" id="perArea"></div>
+    <h2>Alle aktive bestillinger</h2>
+    <div class="list" id="allActive"></div>
+    <div class="card admin-only" hidden>
+      <b>Rydd opp</b>
+      <p style="margin:6px 0 10px;color:var(--muted)">Fjerner leverte bestillinger og ferdige oppgaver.</p>
+      <button class="btn ghost" id="clearDone">Rydd opp</button>
+    </div>
+  </section>
+</div>
+<datalist id="runnerList"></datalist>
+<div class="lightbox" id="lightbox" hidden><img id="lbImg" alt="Bilde fra baren" referrerpolicy="no-referrer"><p>Trykk hvor som helst for å lukke</p></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* ===== Språk: norsk / engelsk =====
+   Siden er skrevet på norsk; i engelsk modus oversettes teksten i nettleseren. */
+let LANG=(()=>{try{return localStorage.getItem("lang")||"no"}catch(e){return "no"}})();
+const LOCALE=()=>LANG==="en"?"en-GB":"nb-NO";
+const EXACT=new Map(Object.entries({
+"Admin":"Admin","Akkurat nå på gulvet":"On the floor right now","Alle aktive bestillinger":"All active orders","Antall":"Quantity",
+"Bare fra mitt område":"Only from my area","Barer":"Bars","Barlogistikk":"Bar Logistics","Beskjed til runner (valgfritt)":"Note for the runner (optional)",
+"Bestill is, glass, varer og hjelp":"Order ice, glasses, supplies and help","Bilde (valgfritt)":"Photo (optional)","Bytt":"Switch","Bytt bar":"Switch bar",
+"Dag":"Day","Får ikke kontakt med serveren. Sjekk nettet – prøver igjen automatisk.":"Can't reach the server. Check your connection – retrying automatically.",
+"Deres bestillinger":"Your orders","Detaljer (valgfritt)":"Details (optional)","Du bestiller som":"Ordering as","Du er logget inn som":"Logged in as","Endre":"Change",
+"Enhet (poser, kasser…)":"Unit (bags, crates…)","F.eks. 2. etasje":"E.g. 2nd floor","F.eks. Fyll is-kistene":"E.g. Refill the ice chests","F.eks. Himkok (Oslo)":"E.g. Himkok (Oslo)",
+"F.eks. bakdøra ved kjøkkenet, spør etter Kari":"E.g. back door by the kitchen, ask for Kari","F.eks. is ligger i kjølerom B":"E.g. ice is in cold room B",
+"F.eks. lever bak disken":"E.g. deliver behind the counter","Fjern bilde":"Remove photo","Fjerner leverte bestillinger og ferdige oppgaver.":"Removes delivered orders and completed tasks.",
+"Flere":"More","Forrige dag":"Previous day","Fra":"From","Færre":"Fewer","Gå dit":"Go there","Haster – vi er tomme":"Urgent – we're out","Haster":"Urgent",
+"Hva skal gjøres?":"What needs doing?","Hva trenger dere?":"What do you need?","Hvem":"Who","Hvem er du?":"Who are you?","Hvilke glass?":"Which glasses?",
+"Hvilken bar er du?":"Which bar are you?","Hvor":"Where","Hvordan vil dere motta ting?":"How do you want deliveries?","I dag":"Today","Innlogget som admin":"Logged in as admin",
+"Kobler til…":"Connecting…","Lagre":"Save","Ledige bestillinger":"Open orders","Legg inn oppgave":"Add task","Legg til":"Add","Legg til bar":"Add bar","Legg til vakt":"Add shift",
+"Levering til dere":"Delivery to you","Levert":"Delivered","Logg inn":"Log in","Logg inn med PIN-kode.":"Log in with your PIN code.","Logg ut":"Log out","Min vakt":"My shift",
+"Mine leveringer":"My deliveries","Mine vakter":"My shifts","Navn":"Name","Neste dag":"Next day","Noe annet? Skriv her":"Something else? Type here","Ny bar":"New bar",
+"Ny runner":"New runner","Nytt område / etasje":"New area / floor","Område":"Area","Områder":"Areas","Oppgaver":"Tasks","Oslo Cocktailfestival – barer og backrunners":"Oslo Cocktail Festival – bars and backrunners",
+"Oversikt":"Overview","PIN-kode":"PIN code","Per bar":"Per bar","Per område":"Per area","På vei":"On the way","Runnere":"Runners","Rydd opp":"Clean up",
+"Se vakten din, ta bestillinger og chat":"See your shift, take orders and chat","Send bestilling":"Send order","Sett opp vakt":"Schedule a shift","Skriv en melding…":"Write a message…",
+"Står du ikke på lista? Si fra til en admin, så legger de deg til.":"Not on the list? Ask an admin to add you.","Til":"To","Tips: ta bilde av varen, ikke av gjester.":"Tip: photograph the item, not the guests.",
+"Trykk hvor som helst for å lukke":"Tap anywhere to close","Trykk på en tom rute for å sette opp en vakt der.":"Tap an empty slot to schedule a shift there.",
+"Trykk på et navn for å endre det. Velg område for å flytte baren.":"Tap a name to edit it. Pick an area to move the bar.","Trykk på navnet ditt. Telefonen husker det.":"Tap your name. Your phone will remember it.",
+"Vakter":"Shifts","Vaktplan":"Schedule","Velg navnet ditt under":"Pick your name under","Velg én gang – telefonen husker det til neste gang.":"Choose once – your phone remembers it.",
+"Velg én gang – telefonen husker det.":"Choose once – your phone remembers it.","Velg én gang. Runnerne ser dette på alle bestillingene deres.":"Choose once. Runners will see this on all your orders.",
+"Venter":"Waiting","først.":"first.","levert":"delivered","på vei":"on the way","venter":"waiting","← Tilbake":"← Back","☰ Liste":"☰ List","📅 Kalender":"📅 Calendar",
+"📢 Send som kunngjøring (festes øverst)":"📢 Send as announcement (pinned at top)","📷 Ta bilde av det dere mangler":"📷 Take a photo of what you need",
+"Bilde fra baren":"Photo from the bar","Forhåndsvisning":"Preview","Navn på bar":"Bar name","Vis bildet stort":"Show photo full size",
+"Alle i området":"Everyone in the area","Alle på vakt i området":"Everyone on shift in the area","Alt er levert. Ta en pust 😮‍💨":"Everything's delivered. Take a breather 😮‍💨",
+"Andre runnere":"Other runners","Avbryt":"Cancel","Bar fjernet":"Bar removed","Bar lagt til":"Bar added","Bare admin kan endre område":"Only admins can change areas",
+"Bare admin kan gjøre dette":"Only admins can do this","Bestilling sendt ✓":"Order sent ✓","Bestilling avbrutt":"Order cancelled","Bytte bar på denne telefonen?":"Switch bar on this phone?",
+"Bytte navn på denne telefonen?":"Switch name on this phone?","Den baren finnes allerede":"That bar already exists","Den er din – løp! 🏃":"It's yours – run! 🏃",
+"Den runneren finnes allerede":"That runner already exists","Det finnes allerede en bar med det navnet":"There's already a bar with that name","Du er på vakt nå":"You're on shift now",
+"Du har ingen vakter lagt inn. Spør vaktansvarlig.":"You have no shifts yet. Ask the shift lead.","Feil kode, prøv igjen":"Wrong code, try again","Fjern":"Remove","Fjernet":"Removed",
+"Frakoblet":"Offline","Fyll inn hva, hvor, fra og til":"Fill in what, where, from and to","Fyll inn runner, område, dag og tid":"Fill in runner, area, day and time",
+"Ikke logget inn":"Not logged in","Ingen aktive bestillinger.":"No active orders.","Ingen barer ennå.":"No bars yet.","Ingen barer ennå. Admin legger dem inn under ⚙️ Admin.":"No bars yet. An admin adds them under ⚙️ Admin.",
+"Ingen barer":"No bars","Ingen bestillinger ennå. Trykk på det dere trenger over, og send.":"No orders yet. Tap what you need above and send.","Ingen kommende vakter.":"No upcoming shifts.",
+"Ingen leveringer akkurat nå.":"No deliveries right now.","Ingen meldinger ennå. Si hei 👋":"No messages yet. Say hi 👋","Ingen områder ennå.":"No areas yet.","Ingen oppgaver lagt inn.":"No tasks added.",
+"Ingen oppgaver på deg. 👌":"No tasks for you. 👌","Ingen runner på vakt":"No runner on shift","Ingen runner på vakt akkurat nå":"No runner on shift right now",
+"Ingen runnere ennå. Legg til under.":"No runners yet. Add one below.","Ingen runnere på lista ennå.":"No runners on the list yet.","Ingen vakt satt opp":"No shift scheduled",
+"Ingen vakter satt opp ennå.":"No shifts scheduled yet.","Ingen vakter.":"No shifts.","Ingen egne oppgaver.":"No personal tasks.","Ingen på vakt":"Nobody on shift","Ingenting å rydde":"Nothing to clean up",
+"Innlogget":"Logged in","Ja":"Yes","Klarte ikke å lese bildet. Prøv et annet.":"Couldn't read that photo. Try another one.","Kunne ikke endre navnet":"Couldn't change the name",
+"Kunne ikke lagre":"Couldn't save","Kunne ikke sende":"Couldn't send","Kunne ikke sende. Prøv igjen.":"Couldn't send. Try again.","Kunne ikke ta bestillingen":"Couldn't take the order",
+"Lagret ✓":"Saved ✓","Lagt tilbake i køen":"Put back in the queue","Laster barer…":"Loading bars…","Laster opp bilde…":"Uploading photo…","Laster…":"Loading…",
+"Legg til et område først":"Add an area first","Legg til områder under ⚙️ Admin (f.eks. «1. etasje», «Bakgården»).":"Add areas under ⚙️ Admin (e.g. \"1st floor\", \"Courtyard\").",
+"Legg til områder under ⚙️ Admin for å se kalenderen.":"Add areas under ⚙️ Admin to see the calendar.","Levert ✓":"Delivered ✓","Logg inn som admin først":"Log in as admin first",
+"Logget inn":"Logged in","Logget ut":"Logged out","Lukk":"Close","Melding slettet":"Message deleted","Navnet ditt er ikke på lista lenger":"Your name is no longer on the list",
+"Navnet kan ikke være tomt":"The name can't be empty","Neste vakt":"Next shift","Noe gikk galt":"Something went wrong","Noen andre tok den":"Someone else took it",
+"Område fjernet":"Area removed","Område lagt til":"Area added","Området finnes allerede":"That area already exists","Oppgave ferdig ✓":"Task done ✓","Oppgave lagt inn ✓":"Task added ✓",
+"Oppgave slettet":"Task deleted","Oppgave åpnet igjen":"Task reopened","PIN lagret":"PIN saved","Prøv igjen om litt":"Try again in a moment","På vakt der da":"On shift there at that time",
+"Ryddet ✓":"Cleaned up ✓","Slett":"Delete","slett":"delete","Slette meldingen?":"Delete this message?","Slette oppgaven?":"Delete this task?","Slette vakten?":"Delete this shift?",
+"Slipp":"Release","Ta den":"Take it","Angre":"Undo","Ferdig":"Done","＋ Oppgave":"＋ Task","＋ Vakt":"＋ Shift","Uten område":"No area","uten område":"no area","Vakt slettet":"Shift deleted",
+"Velg baren din først.":"Pick your bar first.","Velg en måte, eller skriv detaljer":"Pick a method, or write some details","Velg navnet ditt først":"Pick your name first",
+"Velg navnet ditt under Min vakt først":"Pick your name under My shift first","Vent litt og prøv igjen":"Wait a moment and try again","Bildet er for stort":"The photo is too large",
+"Bildet kunne ikke lastes opp":"The photo couldn't be uploaded","akkurat nå":"just now","ingen nå":"nobody now","Bruk 4–8 tall":"Use 4–8 digits","Nå":"Now","forsinket":"late",
+"pågår nå":"in progress","Fjern fra lista":"Remove from list","Gi disse et område under ⚙️ Admin":"Give these an area under ⚙️ Admin","📷 Bildet er slettet":"📷 Photo deleted",
+"Skriv navnet ditt for å se vakten din.":"Enter your name to see your shift.","Skriv navnet ditt først.":"Enter your name first.","Vinglass":"Wine glass","Smaksglass":"Tasting glass",
+"Barlogistikk – Oslo Cocktailfestival":"Bar Logistics – Oslo Cocktail Festival"
+}));
+const RX=[
+[/^(.+)\. Bestillingen er ikke sendt\.$/,a=>trCore(a)+". The order was not sent."],
+[/^(\d+) min siden$/,a=>a+" min ago"],
+[/^Logget inn som (.+)$/,a=>"Logged in as "+a],
+[/^Hei (.+) 👋$/,a=>"Hi "+a+" 👋"],
+[/^Bar flyttet til (.+)$/,a=>"Bar moved to "+trCore(a)],
+[/^«(.+)» heter nå «(.+)»$/,(a,b)=>`"${a}" is now "${b}"`],
+[/^(.+) satt på (.+) ✓$/,(a,b)=>`${a} assigned to ${b} ✓`],
+[/^Velg område og tid for (.+)$/,a=>"Pick area and time for "+a],
+[/^Oppgave til (.+)$/,a=>"Task for "+a],
+[/^(.+) kl\. (\d\d:\d\d) – skriv inn runner$/,(a,b)=>`${a} at ${b} – enter a runner`],
+[/^Ingen ventende i (.+)\. 😮‍💨$/,a=>`Nothing waiting in ${a}. 😮‍💨`],
+[/^(.+) har allerede vakt (.+) i (.+)\. Legge til likevel\?$/,(a,b,c)=>`${a} already has a shift ${b} in ${c}. Add anyway?`],
+[/^Fjerne (\d+) leverte bestillinger og (\d+) ferdige oppgaver\?$/,(a,b)=>`Remove ${a} delivered orders and ${b} completed tasks?`],
+[/^Fjerne området (.+)\? Barer og vakter blir liggende\.$/,a=>`Remove the area ${a}? Bars and shifts stay.`],
+[/^Fjerne (.+) fra lista\? Vakter og oppgaver blir liggende\.$/,a=>`Remove ${a} from the list? Shifts and tasks stay.`],
+[/^Fjerne (.+)\?$/,a=>`Remove ${a}?`],
+[/^Fjern (.+)$/,a=>"Remove "+a],
+[/^(.+) lagt til$/,a=>a+" added"],
+[/^Totalt: (.+)$/,a=>"Total: "+trCore(a)],
+[/^(\d+) venter$/,a=>a+" waiting"],[/^(\d+) på vei$/,a=>a+" on the way"],
+[/^(\d+) bar(er)?$/,(a,b)=>a+(a==="1"?" bar":" bars")],
+[/^(\d+) bestilling(er)? venter$/,(a)=>a+(a==="1"?" order waiting":" orders waiting")],
+[/^(\d+) vakt(er)?$/,a=>a+(a==="1"?" shift":" shifts")],
+[/^(\d+) oppgaver?$/,a=>a+(a==="1"?" task":" tasks")],
+[/^(\d+) innlogget$/,a=>a+" logged in"],
+[/^(\d+) på vakt nå$/,a=>a+" on shift now"],[/^(\d+) på vakt$/,a=>a+" on shift"],
+[/^Sist sett (.+)$/,a=>"Last seen "+a],
+[/^ferdig av (.+)$/,a=>"done by "+a],
+[/^📍 (.+) nå$/,a=>`📍 ${a} now`],
+[/^Vakt kl\. (\d\d:\d\d)$/,a=>"Shift at "+a],
+[/^Til kl\. (\d\d:\d\d)$/,a=>"Until "+a],
+[/^til (\d\d:\d\d)$/,a=>"until "+a],
+[/^Barer: (.+)$/,a=>"Bars: "+a],
+[/^Runner nå: (.+)$/,a=>"Runner now: "+a],
+[/^Neste: (.+) kl\. (\d\d:\d\d)$/,(a,b)=>`Next: ${a} at ${b}`],
+[/^Neste: (.+)$/,a=>"Next: "+a],
+[/^📢 Kunngjøring fra (.+)$/,a=>"📢 Announcement from "+a],
+[/^Område for (.+)$/,a=>"Area for "+a],
+[/^Bilde fra (.+)$/,a=>"Photo from "+a],
+[/^(.+), (.+), (\d\d:\d\d) til (\d\d:\d\d)$/,(a,b,c,d)=>`${a}, ${b}, ${c} to ${d}`],
+];
+const TOKENS=[
+["🧽 Hent brukte glass","🧽 Collect used glasses"],["🍸 Rett til bartender","🍸 Straight to the bartender"],["📦 Sett bak disken","📦 Leave behind the counter"],
+["🧊 Rett i is-kista","🧊 Straight into the ice chest"],["🚪 Ved bakdøra","🚪 At the back door"],["📣 Rop/vink når du er her","📣 Shout/wave when you're here"],
+["🧊 Is","🧊 Ice"],["🍋 Sitron","🍋 Lemon"],["🍸 Glass","🍸 Glasses"],["🍬 Sukkersirup","🍬 Sugar syrup"],["🌿 Mynte","🌿 Mint"],["🍊 Appelsin","🍊 Orange"],
+["🧻 Servietter","🧻 Napkins"],["🗑️ Tøm søppel","🗑️ Empty the trash"],["📷 Se bilde","📷 See photo"],
+["🏃 På vei","🏃 On my way"],["🙋 Trenger hjelp","🙋 Need help"],["☕ Tar pause 10 min","☕ Taking a 10 min break"],["✅ Tilbake","✅ Back"],
+["Vinglass","Wine glass"],["Smaksglass","Tasting glass"],
+["Slette denne vakten?","Delete this shift?"],[" kl. "," at "],
+];
+function trCore(c){
+  if(EXACT.has(c))return EXACT.get(c);
+  if(c.includes(" · ")){const ps=c.split(" · "),out=ps.map(p=>p?trCore(p):p);if(out.some((x,i)=>x!==ps[i]))return out.join(" · ")}
+  for(const [rx,fn] of RX){const m=c.match(rx);if(m)return fn(...m.slice(1))}
+  let r=c;for(const [a,b] of TOKENS)if(r.includes(a))r=r.split(a).join(b);
+  return r;
+}
+function tr(t){
+  if(LANG!=="en"||!t)return t;
+  const m=/^(\s*)([\s\S]*?)(\s*)$/.exec(t);if(!m[2])return t;
+  if(m[2].includes("\n"))return m[1]+m[2].split("\n").map(l=>l.trim()?trCore(l):l).join("\n")+m[3];
+  return m[1]+trCore(m[2])+m[3];
+}
+const _orig=new WeakMap(),_shown=new WeakMap(),_aorig=new WeakMap();
+const I18N_ATTRS=["placeholder","aria-label","title","alt","label"];
+function trText(n){
+  const cur=n.data;let o=_orig.get(n);
+  if(o===undefined||cur!==_shown.get(n)){o=cur;_orig.set(n,o)}
+  const out=tr(o);if(out!==cur)n.data=out;_shown.set(n,out);
+}
+function trAttrs(el){
+  let rec=_aorig.get(el);if(!rec){rec={};_aorig.set(el,rec)}
+  for(const a of I18N_ATTRS){if(!el.hasAttribute(a))continue;const cur=el.getAttribute(a);
+    if(!rec[a]||cur!==rec[a].shown)rec[a]={o:cur};const out=tr(rec[a].o);rec[a].shown=out;if(out!==cur)el.setAttribute(a,out)}
+}
+function trTree(root){
+  if(root.nodeType===3){const p=root.parentNode;if(p&&!/^(SCRIPT|STYLE|TEXTAREA)$/.test(p.nodeName))trText(root);return}
+  if(root.nodeType!==1||/^(SCRIPT|STYLE)$/.test(root.nodeName))return;
+  trAttrs(root);
+  const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT|NodeFilter.SHOW_ELEMENT);
+  let n;while((n=w.nextNode())){if(n.nodeType===1){if(/^(SCRIPT|STYLE)$/.test(n.nodeName))continue;trAttrs(n)}else if(!/^(SCRIPT|STYLE|TEXTAREA)$/.test(n.parentNode.nodeName))trText(n)}
+}
+new MutationObserver(ms=>{for(const m of ms){
+  if(m.type==="childList")m.addedNodes.forEach(trTree);
+  else if(m.type==="characterData")trTree(m.target);
+  else if(m.type==="attributes")trAttrs(m.target);
+}}).observe(document.body,{childList:true,subtree:true,characterData:true,attributes:true,attributeFilter:I18N_ATTRS});
+function applyLang(){
+  document.documentElement.lang=LANG==="en"?"en":"no";
+  document.title=LANG==="en"?"Bar Logistics – Oslo Cocktail Festival":"Barlogistikk – Oslo Cocktailfestival";
+  const b=document.getElementById("langBtn");if(b){b.textContent=LANG==="en"?"NO":"EN";b.setAttribute("aria-label",LANG==="en"?"Bytt til norsk":"Switch to English")}
+  trTree(document.body);
+}
+
+const ITEMS=["🧊 Is","🍋‍🟩 Lime","🍋 Sitron","🍸 Glass","🧽 Hent brukte glass","🍬 Sukkersirup","🌿 Mynte","🫧 Tonic","🫧 Soda","🍊 Appelsin","🧻 Servietter","🗑️ Tøm søppel"];
+const LATE_MIN=10;
+const $=id=>document.getElementById(id);
+const store={get(k){try{return localStorage.getItem(k)||""}catch(e){return ""}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
+const fmtT=new Intl.DateTimeFormat("nb-NO",{hour:"2-digit",minute:"2-digit"});
+const fmtD={format:d=>new Intl.DateTimeFormat(LOCALE(),{weekday:"long",day:"numeric",month:"long"}).format(d)};
+const hm=ts=>fmtT.format(new Date(ts));
+const dayKey=ts=>{const d=new Date(ts);return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")};
+const todayStr=()=>dayKey(Date.now());
+const toTs=(day,time)=>new Date(day+"T"+time).getTime();
+const cap=s=>s.charAt(0).toUpperCase()+s.slice(1);
+
+let prefs={},chat=[],chatReady=false,prefPick="",prefEditing=false;
+let isAdmin=false,assets=null,photoBlob=null;
+let db=null,orders=[],bars=[],areas=[],shifts=[],tasks=[];
+let pickedItem="",qty=1,runnersDocs=[],selRunner="";
+
+/* Egen bekreftelsesboks (vanlige nettleser-dialoger er blokkert her) */
+function ask(msg,ok="Ja"){
+  return new Promise(res=>{
+    const o=document.createElement("div");o.className="askov";
+    o.innerHTML=`<div class="askbox" role="alertdialog" aria-modal="true"><p></p><div class="row"><button class="btn ghost" data-a="0">Avbryt</button><button class="btn cherry" data-a="1"></button></div></div>`;
+    o.querySelector("p").textContent=msg;o.querySelector('[data-a="1"]').textContent=ok;
+    const done=v=>{o.remove();document.removeEventListener("keydown",key);res(v)};
+    const key=e=>{if(e.key==="Escape")done(false)};
+    o.addEventListener("click",e=>{const b=e.target.closest("[data-a]");if(b)done(b.dataset.a==="1");else if(e.target===o)done(false)});
+    document.addEventListener("keydown",key);
+    document.body.appendChild(o);o.querySelector('[data-a="1"]').focus();
+  });
+}
+function toast(t){const el=$("toast");el.textContent=t;el.classList.add("show");clearTimeout(toast._t);toast._t=setTimeout(()=>el.classList.remove("show"),2200)}
+function mins(ts){return Math.max(0,Math.floor((Date.now()-ts)/60000))}
+function ago(ts){const m=mins(ts);return m<1?"akkurat nå":m+" min siden"}
+function esc(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function fill(id,html,empty){$(id).innerHTML=html||`<div class="empty">${empty}</div>`}
+const areaOfBar=name=>(bars.find(b=>b.name===name)||{}).area||"";
+const onNow=(s,t=Date.now())=>s.start<=t&&t<s.end;
+const floorOf=n=>{const s=n&&shifts.find(x=>x.runner.toLowerCase()===n.toLowerCase()&&onNow(x));return s?s.area:""};
+const floorPill=n=>{const a=floorOf(n);return a?` <span class="floorpill">📍 ${esc(a)}</span>`:""};
+const staffOn=(area,t=Date.now())=>shifts.filter(s=>s.area===area&&onNow(s,t));
+
+/* Admin-PIN: ekstra lås oppå admin-tilgangen (hash lagres der bare admin kan lese) */
+const UNLOCK_MS=12*3600000;
+let pinDoc=undefined,pinMode="unlock",pinFails=0,pinBlockedUntil=0;
+const adminOpen=()=>(+store.get("adminUntil")||0)>Date.now();
+function renderAdminLock(){
+  const open=adminOpen()&&pinDoc&&pinMode==="unlock";
+  $("adminBody").hidden=!open;$("adminLock").hidden=open;
+  if(open)return;
+  const setup=false;
+  $("lockTitle").textContent="Admin";
+  $("lockSub").textContent="Logg inn med PIN-kode.";
+  $("pinGo").textContent=setup?"Lagre":"Logg inn";
+  $("pinGo").disabled=pinDoc===undefined;
+}
+async function pinSubmit(){
+  const a=$("pin1").value.trim(),msg=$("pinMsg");msg.textContent="";
+  if(!a)return;
+  $("pinGo").disabled=true;
+  try{
+    const r=await API.call("login",{pin:a});
+    store.set("adminToken",r.token);store.set("adminUntil",String(r.exp));toast("Logget inn");
+  }catch(e){msg.textContent=e.code==="rate"?"Prøv igjen om litt":e.code==="pin"?"Feil kode, prøv igjen":"Noe gikk galt"}
+  $("pinGo").disabled=false;
+  $("pin1").value="";renderAdminLock();applyRoles();
+}
+$("pinGo").onclick=pinSubmit;
+["pin1"].forEach(id=>$(id).addEventListener("keydown",e=>{if(e.key==="Enter")pinSubmit()}));
+$("adminLockBtn").onclick=()=>{store.set("adminUntil","0");store.set("adminToken","");pinMode="unlock";renderAdminLock();applyRoles();toast("Logget ut")};
+
+/* Roller: bar ser bare Bar, runner ser Min vakt → Chat, admin (innlogget med PIN) ser alt */
+const ALL_TABS=["start","bar","runner","plan","overview","chat","admin"];
+if(!store.get("role")){if(store.get("bar"))store.set("role","bar");else if(store.get("runner"))store.set("role","runner")}
+const adminMode=()=>isAdmin&&!!pinDoc&&adminOpen();
+function allowedTabs(){
+  if(adminMode())return ["bar","runner","plan","overview","chat"];
+  const r=store.get("role");
+  if(r==="bar")return ["bar"];
+  if(r==="runner")return ["runner","plan","overview","chat"];
+  return [];
+}
+let curTab="";
+function showTab(t){
+  curTab=t;document.body.classList.toggle("wide",t==="plan");
+  ALL_TABS.forEach(x=>$("tab-"+x).hidden=x!==t);
+  document.querySelectorAll("nav.tabs button").forEach(b=>b.setAttribute("aria-selected",b.dataset.tab===t));
+  $("gear").setAttribute("aria-pressed",String(t==="admin"));
+  if(t!=="start"&&t!=="admin")store.set("tab",t);
+  if(t==="chat")markRead();
+  if(t==="admin"){renderAdminLock();if(!$("adminLock").hidden)setTimeout(()=>$("pin1").focus(),50)}
+}
+let chosen=false; // man velger Bar/Runner hver gang siden åpnes
+function applyRoles(){
+  const ok=allowedTabs();
+  $("gear").hidden=!isAdmin;
+  if(!chosen&&curTab!=="admin"){
+    document.querySelector("nav.tabs").hidden=true;
+    if(curTab!=="start")showTab("start");
+    renderStartHints();return;
+  }
+  document.querySelectorAll("nav.tabs button").forEach(b=>b.hidden=!ok.includes(b.dataset.tab));
+  document.querySelector("nav.tabs").hidden=ok.length<2;
+  $("gear").hidden=!isAdmin;
+  document.querySelectorAll(".admin-only").forEach(el=>el.hidden=!adminMode());
+  if(curTab==="admin"&&isAdmin)return;
+  if(!ok.includes(curTab)){const saved=store.get("tab");showTab(ok.includes(saved)?saved:(ok[0]||"start"))}
+}
+function renderStartHints(){
+  const b=store.get("bar"),r=store.get("runner");
+  document.querySelectorAll(".rolepick [data-last]").forEach(el=>{const v=el.dataset.last==="bar"?b:r;el.textContent=v?"↻ "+v:"";el.hidden=!v});
+}
+function setRole(r){chosen=!!r;store.set("role",r);if(r){store.set("tab",r);showTab(r)}applyRoles();render();window.scrollTo({top:0})}
+document.querySelectorAll("nav.tabs button").forEach(b=>b.onclick=()=>showTab(b.dataset.tab));
+document.addEventListener("click",e=>{const b=e.target.closest("[data-role]");if(b)setRole(b.dataset.role)});
+$("gear").onclick=()=>{if(curTab==="admin"){curTab="";applyRoles();return}showTab("admin");window.scrollTo({top:0})};
+function applyAdmin(){applyRoles()}
+applyAdmin();
+$("shDay").value=$("tkDay").value=todayStr();
+
+/* Bar order form */
+ITEMS.forEach(it=>{const c=document.createElement("button");c.className="chip";c.textContent=it;c.dataset.v=it;c.setAttribute("aria-pressed","false");
+  c.onclick=()=>{pickedItem=pickedItem===it?"":it;$("customItem").value="";renderChips();updateSend()};$("items").appendChild(c)});
+function renderChips(){document.querySelectorAll("#items .chip").forEach(c=>c.setAttribute("aria-pressed",c.dataset.v===pickedItem));if(typeof renderGlass==="function")renderGlass()}
+$("customItem").oninput=()=>{if($("customItem").value.trim()){pickedItem="";renderChips()}updateSend()};
+$("qMinus").onclick=()=>{qty=Math.max(1,qty-1);$("qVal").textContent=qty};
+$("qPlus").onclick=()=>{qty=Math.min(99,qty+1);$("qVal").textContent=qty};
+const GLASS=["Coupe","Nick & Nora","Rocks/tumbler","Highball","Martini","Vinglass","Shot","Smaksglass"];
+let glassType="";
+GLASS.forEach(g=>{const c=document.createElement("button");c.type="button";c.className="chip";c.textContent=g;c.dataset.v=g;
+  c.onclick=()=>{glassType=glassType===g?"":g;renderGlass();updateSend()};$("glassTypes").appendChild(c)});
+function renderGlass(){$("glassBox").hidden=pickedItem!=="🍸 Glass";if($("glassBox").hidden)glassType="";
+  document.querySelectorAll("#glassTypes .chip").forEach(c=>c.setAttribute("aria-pressed",c.dataset.v===glassType))}
+const currentItem=()=>$("customItem").value.trim()||(pickedItem==="🍸 Glass"&&glassType?"🍸 Glass – "+glassType:pickedItem);
+function updateSend(){$("send").disabled=!(db&&$("barSelect").value&&(currentItem()||photoBlob))}
+
+/* Bilde: krymp på telefonen før opplasting (raskere, og fjerner GPS-info) */
+function shrink(file,max=1600,q=.78){
+  return new Promise((res,rej)=>{
+    const url=URL.createObjectURL(file),img=new Image();
+    img.onload=()=>{const k=Math.min(1,max/Math.max(img.width,img.height)),c=document.createElement("canvas");
+      c.width=Math.round(img.width*k);c.height=Math.round(img.height*k);c.getContext("2d").drawImage(img,0,0,c.width,c.height);
+      URL.revokeObjectURL(url);c.toBlob(b=>b?res(b):rej(new Error("toBlob")),"image/jpeg",q)};
+    img.onerror=()=>{URL.revokeObjectURL(url);rej(new Error("decode"))};
+    img.src=url;
+  });
+}
+function clearPhoto(){photoBlob=null;$("photoInput").value="";$("photoPrev").hidden=true;$("photoBtn").hidden=false;
+  if($("photoImg").src.startsWith("blob:"))URL.revokeObjectURL($("photoImg").src);$("photoImg").removeAttribute("src");updateSend()}
+$("photoBtn").onclick=()=>$("photoInput").click();
+$("photoRm").onclick=clearPhoto;
+$("photoInput").onchange=async()=>{
+  const f=$("photoInput").files[0];if(!f)return;
+  try{photoBlob=await shrink(f);$("photoImg").src=URL.createObjectURL(photoBlob);$("photoPrev").hidden=false;$("photoBtn").hidden=true}
+  catch(e){toast("Klarte ikke å lese bildet. Prøv et annet.");clearPhoto()}
+  updateSend();
+};
+function openPhoto(id){$("lbImg").src=photoUrl(id,2000);$("lightbox").hidden=false}
+$("lightbox").onclick=()=>{$("lightbox").hidden=true;$("lbImg").removeAttribute("src")};
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("lightbox").hidden)$("lightbox").click()});
+$("barPick").addEventListener("click",e=>{const b=e.target.closest("[data-bar]");if(!b)return;store.set("bar",b.dataset.bar);store.set("barId",b.dataset.barid||"");render();window.scrollTo({top:0});toast("Logget inn som "+b.dataset.bar)});
+$("barLogout").onclick=async()=>{if(await ask("Bytte bar på denne telefonen?")){store.set("bar","");store.set("barId","");render()}};
+$("runnerName").value=store.get("runner");
+function setRunner(n){
+  n=(n||"").trim();
+  const prev=$("runnerName").value.trim();
+  const known=rosterNames().find(x=>x.toLowerCase()===n.toLowerCase());
+  if(known)n=known;
+  $("runnerName").value=n;store.set("runner",n);
+  if(prev&&!same(prev,n))setPresence(prev,0);
+  if(n)setPresence(n,Date.now());
+  render();
+  if(n){window.scrollTo({top:0});toast("Hei "+n+" 👋")}
+}
+$("runPick").addEventListener("click",e=>{const b=e.target.closest("[data-runner]");if(b)setRunner(b.dataset.runner)});
+
+$("runLogout").onclick=async()=>{if(await ask("Bytte navn på denne telefonen?","Bytt"))setRunner("")};
+$("onlyMine").checked=store.get("onlyMine")!=="0";
+$("onlyMine").onchange=()=>{store.set("onlyMine",$("onlyMine").checked?"1":"0");render()};
+
+$("send").onclick=async()=>{
+  const bar=$("barSelect").value,item=currentItem()||"📷 Se bilde";if(!bar||!(currentItem()||photoBlob)||!db)return;
+  $("send").disabled=true;
+  let photo="";
+  if(photoBlob&&assets){
+    $("send").textContent="Laster opp bilde…";
+    try{photo=(await assets.upload(photoBlob,{type:"image/jpeg"})).id}
+    catch(e){$("send").textContent="Send bestilling";
+      const msg=e&&e.code==="too_large"?"Bildet er for stort":e&&e.code==="rate_limited"?"Vent litt og prøv igjen":"Bildet kunne ikke lastes opp";
+      toast(msg+". Bestillingen er ikke sendt.");updateSend();return}
+    $("send").textContent="Send bestilling";
+  }
+  try{
+    await db.collection("orders").doc().set({bar,area:areaOfBar(bar),item,photo,qty,unit:$("unit").value.trim(),note:$("note").value.trim(),urgent:$("urgent").checked,status:"ny",runner:"",createdAt:Date.now()});
+    pickedItem="";qty=1;$("qVal").textContent=1;["customItem","unit","note"].forEach(i=>$(i).value="");$("urgent").checked=false;renderChips();clearPhoto();
+    toast("Bestilling sendt ✓");
+  }catch(e){toast("Kunne ikke sende. Prøv igjen.")}
+  updateSend();
+};
+
+/* Chat for runnere og admin */
+const QUICK=["👍 Ok","🏃 På vei","🙋 Trenger hjelp","☕ Tar pause 10 min","✅ Tilbake"];
+QUICK.forEach(q=>{const c=document.createElement("button");c.type="button";c.className="chip";c.textContent=q;c.onclick=()=>sendChat(c.textContent);$("quick").appendChild(c)});
+const chatName=()=>$("runnerName").value.trim();
+$("chatGoLogin").onclick=()=>document.querySelector('[data-tab="runner"]').click();
+async function sendChat(text){
+  text=(text||"").trim();if(!text||!db)return;
+  const name=chatName();if(!name){$("chatNameRow").hidden=false;toast("Velg navnet ditt under Min vakt først");return}
+  const ann=isAdmin&&$("chatAnnounce").checked;
+  try{await db.collection("chat").doc().set({name,text,ts:Date.now(),admin:isAdmin,announce:ann});
+    if(text===$("chatText").value.trim())$("chatText").value="";$("chatAnnounce").checked=false;markRead();}
+  catch(e){toast("Kunne ikke sende")}
+}
+$("chatSend").onclick=()=>sendChat($("chatText").value);
+$("chatText").addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.isComposing){e.preventDefault();sendChat($("chatText").value)}});
+function markRead(){const last=chat.length?chat[chat.length-1].ts:Date.now();store.set("chatSeen",String(last));$("chatBadge").hidden=true}
+function onChatUpdate(prevLen){
+  const seen=+store.get("chatSeen")||0,me=chatName().toLowerCase();
+  const onChat=!$("tab-chat").hidden;
+  if(onChat&&!document.hidden){markRead()}
+  else{const n=chat.filter(m=>m.ts>seen&&m.name.toLowerCase()!==me).length;$("chatBadge").hidden=!n;$("chatBadge").textContent=n>9?"9+":n}
+  const newest=chat[chat.length-1];
+  if(chatReady&&chat.length>prevLen&&newest&&newest.name.toLowerCase()!==me&&!onChat){try{navigator.vibrate&&navigator.vibrate(newest.announce?[120,80,120]:80)}catch(e){}}
+  chatReady=true;
+}
+function renderChat(){
+  const log=$("chatLog"),atBottom=log.scrollHeight-log.scrollTop-log.clientHeight<60;
+  const me=chatName().toLowerCase();
+  let lastDay="",html="";
+  chat.forEach(m=>{
+    const dk=dayKey(m.ts);if(dk!==lastDay){lastDay=dk;html+=`<div class="daysep">${cap(fmtD.format(new Date(m.ts)))}</div>`}
+    const mine=m.name.toLowerCase()===me;
+    html+=`<div class="msg ${m.announce?"ann":mine?"mine":""}">
+      <div class="who">${m.announce?"📢 ":""}${esc(m.name)}${m.admin?" (admin)":""}${floorPill(m.name)} <span>· ${hm(m.ts)}</span>${isAdmin?`<button class="rm" data-rmmsg="${m.id}">slett</button>`:""}</div>
+      <div class="tx">${esc(m.text)}</div></div>`;
+  });
+  log.innerHTML=html||`<div class="empty">Ingen meldinger ennå. Si hei 👋</div>`;
+  if(atBottom||!renderChat._done){log.scrollTop=log.scrollHeight;renderChat._done=true}
+  const ann=[...chat].reverse().find(m=>m.announce);
+  $("announce").hidden=!ann;
+  if(ann)$("announce").innerHTML=`<div class="sm">📢 Kunngjøring fra ${esc(ann.name)} · ${hm(ann.ts)}</div><div class="tx">${esc(ann.text)}</div>`;
+  $("chatNameRow").hidden=!!$("runnerName").value.trim();
+}
+$("chatLog").addEventListener("click",async e=>{const b=e.target.closest("[data-rmmsg]");if(!b||!isAdmin)return;
+  if(await ask("Slette meldingen?","Slett"))del("chat",b.dataset.rmmsg,"Melding slettet")});
+function updateChatTab(){applyRoles()}
+document.addEventListener("visibilitychange",()=>{if(!document.hidden&&!$("tab-chat").hidden)markRead()});
+
+/* Leveringsønske per bar (egen samling, så baren kan endre selv) */
+const DELIVERY=["🍸 Rett til bartender","📦 Sett bak disken","🧊 Rett i is-kista","🚪 Ved bakdøra","📣 Rop/vink når du er her"];
+const barId=name=>(bars.find(b=>b.name===name)||{}).id;
+const prefOf=name=>{const id=barId(name);return id?prefs[id]:null};
+const prefLabel=p=>p?[p.method,p.detail].filter(Boolean).join(" – "):"";
+DELIVERY.forEach(m=>{const c=document.createElement("button");c.type="button";c.className="chip";c.textContent=m;c.dataset.v=m;
+  c.onclick=()=>{prefPick=prefPick===m?"":m;renderPrefChips()};$("prefChips").appendChild(c)});
+function renderPrefChips(){document.querySelectorAll("#prefChips .chip").forEach(c=>c.setAttribute("aria-pressed",c.dataset.v===prefPick))}
+$("prefEdit").onclick=()=>{const p=prefOf($("barSelect").value)||{};prefPick=p.method||"";$("prefDetail").value=p.detail||"";prefEditing=true;renderPrefChips();render()};
+$("prefSave").onclick=async()=>{
+  const bar=$("barSelect").value,id=barId(bar),detail=$("prefDetail").value.trim();
+  if(!id||!db)return;
+  if(!prefPick&&!detail){toast("Velg en måte, eller skriv detaljer");return}
+  try{await db.collection("barprefs").doc(id).set({bar,method:prefPick,detail,updatedAt:Date.now()});prefEditing=false;toast("Lagret ✓")}
+  catch(e){toast("Kunne ikke lagre")}
+};
+
+/* Endre barnavn (oppdaterer også bestillinger og leveringsønske) */
+async function renameBar(inp){
+  const id=inp.dataset.barName,bar=bars.find(b=>b.id===id);if(!bar||!db)return;
+  const old=bar.name,name=inp.value.trim();
+  if(name===old)return;
+  if(!adminMode()){inp.value=old;toast("Logg inn som admin først");return}
+  if(!name){inp.value=old;toast("Navnet kan ikke være tomt");return}
+  if(bars.some(b=>b.id!==id&&b.name.toLowerCase()===name.toLowerCase())){inp.value=old;toast("Det finnes allerede en bar med det navnet");return}
+  try{
+    await db.collection("bars").doc(id).update({name});
+    for(const o of orders.filter(o=>o.bar===old))await db.collection("orders").doc(o.id).update({bar:name}).catch(()=>{});
+    if(prefs[id])await db.collection("barprefs").doc(id).update({bar:name}).catch(()=>{});
+    toast(`«${old}» heter nå «${name}»`);
+  }catch(e){inp.value=old;toast("Kunne ikke endre navnet")}
+  inp.blur();
+}
+document.addEventListener("keydown",e=>{const i=e.target.closest&&e.target.closest("[data-bar-name]");if(!i)return;
+  if(e.key==="Enter"){e.preventDefault();i.blur()}
+  if(e.key==="Escape"){const b=bars.find(x=>x.id===i.dataset.barName);if(b)i.value=b.name;i.blur()}});
+document.addEventListener("focusout",e=>{const i=e.target.closest&&e.target.closest("[data-bar-name]");if(i)renameBar(i).then(()=>setTimeout(render,0))});
+
+/* Hvem er innlogget: hver runner-telefon sender et livstegn hvert minutt */
+let presence=[],rosterLoaded=false,_rl={r:false,s:false};
+const pkey=n=>n.toLowerCase().replace(/[^a-z0-9æøå]+/g,"-").replace(/^-|-$/g,"")||"x";
+function setPresence(n,ts){if(!db||!n)return;db.collection("presence").doc(pkey(n)).set({name:n,lastSeen:ts}).catch(()=>{})}
+setInterval(()=>{const n=$("runnerName").value.trim();if(n&&!document.hidden)setPresence(n,Date.now())},60000);
+document.addEventListener("visibilitychange",()=>{const n=$("runnerName").value.trim();if(n&&!document.hidden)setPresence(n,Date.now())});
+function seenOf(n){const p=presence.find(x=>same(x.name,n));return p?p.lastSeen:0}
+const isOnline=n=>Date.now()-seenOf(n)<3*60000;
+
+/* Runneroversikt i Vaktplan */
+function rosterNames(){
+  const m=new Map();
+  [...runnersDocs.map(r=>r.name),...shifts.map(s=>s.runner)].forEach(n=>{if(n&&!m.has(n.toLowerCase()))m.set(n.toLowerCase(),n)});
+  return [...m.values()].sort((a,b)=>a.localeCompare(b,"no"));
+}
+const same=(a,b)=>(a||"").toLowerCase()===(b||"").toLowerCase();
+function renderRoster(){
+  const now=Date.now(),names=rosterNames();
+  const on=n=>!!floorOf(n);
+  names.sort((a,b)=>(on(b)-on(a))||a.localeCompare(b,"no"));
+  $("rosterCount").textContent=names.length?`${names.filter(isOnline).length} innlogget · ${names.filter(on).length} på vakt`:"";
+  $("rosterList").innerHTML=names.map(n=>{
+    const f=floorOf(n),next=shifts.filter(s=>same(s.runner,n)&&s.start>now).sort((a,b)=>a.start-b.start)[0];
+    const nS=shifts.filter(s=>same(s.runner,n)&&s.end>now).length;
+    const nT=tasks.filter(t=>!t.done&&same(t.runner,n)).length;
+    const nD=orders.filter(o=>o.status==="på vei"&&same(o.runner,n)).length;
+    const s1=f?`📍 ${esc(f)} nå`:next?`Neste: ${hm(next.start)} · ${esc(next.area)}`:"Ingen vakt satt opp";
+    const s2=[nS&&`${nS} vakt${nS>1?"er":""}`,nT&&`${nT} oppgave${nT>1?"r":""}`,nD&&`${nD} på vei`].filter(Boolean).join(" · ")||"–";
+    const seen=seenOf(n),login=isOnline(n)?`<span class="dot on"></span>Innlogget`:seen?`<span class="dot"></span>Sist sett ${hm(seen)}`:`<span class="dot"></span>Ikke logget inn`;
+    return `<button class="rcard ${f?"on":""} ${same(n,selRunner)?"sel":""}" data-pick-runner="${esc(n)}"><b>${esc(n)}</b><div class="s1">${s1}</div><div class="s1">${login}</div><div class="s2">${s2}</div></button>`;
+  }).join("")||`<div class="empty" style="flex:1">Ingen runnere ennå. Legg til under.</div>`;
+  if(selRunner&&!names.some(n=>same(n,selRunner)))selRunner="";
+  if(!selRunner){$("rosterDetail").innerHTML="";return}
+  const n=names.find(x=>same(x,selRunner)),doc=runnersDocs.find(r=>same(r.name,n));
+  const myS=shifts.filter(s=>same(s.runner,n)&&s.end>now-3600000);
+  const myT=tasks.filter(t=>same(t.runner,n)&&(!t.done||t.doneAt>now-3600000)).sort((a,b)=>(a.done-b.done)||(a.at-b.at));
+  $("rosterDetail").innerHTML=`<div class="rdetail">
+    <div class="rhead"><h3 style="margin:0">${esc(n)}${floorPill(n)}</h3><button class="btn ghost sm" data-pick-runner="">Lukk</button></div>
+    <div class="acts"><button class="btn sm" data-runner-shift="${esc(n)}">＋ Vakt</button><button class="btn sm" data-runner-task="${esc(n)}">＋ Oppgave</button></div>
+    <h4>Vakter</h4>${shiftSchedule(myS,true)||`<div class="calhint">Ingen vakter.</div>`}
+    <h4>Oppgaver</h4>${myT.length?`<div class="list">${myT.map(t=>taskRow(t,`<button class="btn ghost sm" data-act="rmtask" data-id="${t.id}">Slett</button>`)).join("")}</div>`:`<div class="calhint">Ingen egne oppgaver.</div>`}
+    ${doc&&adminMode()?`<button class="btn ghost sm" style="margin-top:14px" data-rm-runner="${doc.id}" data-name="${esc(n)}">Fjern fra lista</button>`:""}
+  </div>`;
+}
+document.addEventListener("click",async e=>{
+  const p=e.target.closest("[data-pick-runner]");
+  if(p){selRunner=same(p.dataset.pickRunner,selRunner)?"":p.dataset.pickRunner;renderRoster();
+    if(selRunner&&window.innerWidth<1000)$("rosterDetail").scrollIntoView({behavior:"smooth",block:"nearest"});return}
+  const vs=e.target.closest("[data-runner-shift]");
+  if(vs){$("shRunner").value=vs.dataset.runnerShift;if(!$("shDay").value)$("shDay").value=todayStr();
+    $("shArea").scrollIntoView({behavior:"smooth",block:"center"});setTimeout(()=>$("shArea").focus(),300);toast(`Velg område og tid for ${vs.dataset.runnerShift}`);return}
+  const vt=e.target.closest("[data-runner-task]");
+  if(vt){renderWhoSelect();$("tkWho").value=vt.dataset.runnerTask;
+    $("tkTitle").scrollIntoView({behavior:"smooth",block:"center"});setTimeout(()=>$("tkTitle").focus(),300);toast(`Oppgave til ${vt.dataset.runnerTask}`);return}
+  const rr=e.target.closest("[data-rm-runner]");
+  if(rr&&db){if(await ask(`Fjerne ${rr.dataset.name} fra lista? Vakter og oppgaver blir liggende.`,"Fjern"))del("runners",rr.dataset.rmRunner,"Fjernet")}
+});
+$("addRunner").onclick=async()=>{
+  if(!adminMode()){toast("Bare admin kan gjøre dette");return}
+  const name=$("newRunner").value.trim();if(!name||!db)return;
+  if(rosterNames().some(n=>same(n,name))){toast("Den runneren finnes allerede");selRunner=rosterNames().find(n=>same(n,name));renderRoster();return}
+  try{await db.collection("runners").doc().set({name,createdAt:Date.now()});$("newRunner").value="";selRunner=name;toast(name+" lagt til")}catch(e){toast("Kunne ikke lagre")}
+};
+$("newRunner").addEventListener("keydown",e=>{if(e.key==="Enter")$("addRunner").click()});
+
+/* Plan actions */
+$("addArea").onclick=async()=>{
+  const name=$("newArea").value.trim();if(!name||!db)return;
+  if(areas.some(a=>a.name.toLowerCase()===name.toLowerCase())){toast("Området finnes allerede");return}
+  try{await db.collection("areas").doc().set({name,createdAt:Date.now()});$("newArea").value="";toast("Område lagt til")}catch(e){toast("Kunne ikke lagre")}
+};
+$("addBar").onclick=async()=>{
+  const name=$("newBar").value.trim();if(!name||!db)return;
+  if(bars.some(b=>b.name.toLowerCase()===name.toLowerCase())){toast("Den baren finnes allerede");return}
+  try{await db.collection("bars").doc().set({name,area:$("newBarArea").value,createdAt:Date.now()});$("newBar").value="";toast("Bar lagt til")}catch(e){toast("Kunne ikke lagre")}
+};
+$("addShift").onclick=async()=>{
+  const runner=$("shRunner").value.trim(),area=$("shArea").value,day=$("shDay").value,f=$("shFrom").value,t=$("shTo").value;
+  if(!runner||!area||!day||!f||!t){toast("Fyll inn runner, område, dag og tid");return}
+  let start=toTs(day,f),end=toTs(day,t);if(end<=start)end+=86400000; // over midnatt
+  const clash=shifts.find(s=>s.runner.toLowerCase()===runner.toLowerCase()&&s.start<end&&start<s.end);
+  if(clash&&!await ask(`${runner} har allerede vakt ${hm(clash.start)}–${hm(clash.end)} i ${clash.area}. Legge til likevel?`))return;
+  try{await db.collection("shifts").doc().set({runner,area,start,end,createdAt:Date.now()});toast(`${runner} satt på ${area} ✓`)}catch(e){toast("Kunne ikke lagre")}
+};
+$("addTask").onclick=async()=>{
+  const title=$("tkTitle").value.trim(),area=$("tkArea").value,day=$("tkDay").value,time=$("tkTime").value,endT=$("tkEnd").value;
+  if(!title||!area||!day||!time||!endT){toast("Fyll inn hva, hvor, fra og til");return}
+  const at=toTs(day,time);let end=toTs(day,endT);if(end<=at)end+=86400000;
+  try{await db.collection("tasks").doc().set({title,area,runner:$("tkWho").value,at,end,note:$("tkNote").value.trim(),done:false,createdAt:Date.now()});
+    $("tkTitle").value="";$("tkNote").value="";toast("Oppgave lagt inn ✓")}catch(e){toast("Kunne ikke lagre")}
+};
+$("tkArea").onchange=renderWhoSelect;
+$("tkDay").onchange=renderWhoSelect;$("tkTime").onchange=()=>{const [h,m]=$("tkTime").value.split(":").map(Number);if(!isNaN(h)){const e=(h*60+m+30)%1440;$("tkEnd").value=String(Math.floor(e/60)).padStart(2,"0")+":"+String(e%60).padStart(2,"0")}renderWhoSelect()};
+
+/* Order actions */
+async function claim(id){
+  const name=$("runnerName").value.trim();
+  if(!name){document.querySelector('[data-tab="runner"]').click();toast("Velg navnet ditt først");return}
+  const ref=db.collection("orders").doc(id);
+  try{
+    const lease=await ref.acquire({holder:name+"-"+Math.random(),ttlMs:3000});
+    if(!lease.acquired){toast("Noen andre tok den");return}
+    const snap=await ref.get();
+    if(!snap.exists||snap.data().status!=="ny"){toast("Noen andre tok den");return}
+    await ref.update({status:"på vei",runner:name,claimedAt:Date.now()});
+    toast("Den er din – løp! 🏃");
+  }catch(e){toast("Kunne ikke ta bestillingen")}
+}
+async function upd(col,id,patch,msg){try{await db.collection(col).doc(id).update(patch);msg&&toast(msg)}catch(e){toast("Noe gikk galt")}}
+async function del(col,id,msg){try{await db.collection(col).doc(id).delete();msg&&toast(msg)}catch(e){toast("Noe gikk galt")}}
+
+$("clearDone").onclick=async()=>{
+  const d1=orders.filter(o=>o.status==="levert"),d2=tasks.filter(t=>t.done);
+  if(!d1.length&&!d2.length){toast("Ingenting å rydde");return}
+  if(!await ask(`Fjerne ${d1.length} leverte bestillinger og ${d2.length} ferdige oppgaver?`))return;
+  for(const o of d1){await del("orders",o.id);if(o.photo&&assets)assets.delete(o.photo).catch(()=>{})}for(const t of d2)await del("tasks",t.id);toast("Ryddet ✓");
+};
+
+document.body.addEventListener("click",async e=>{
+  const ph=e.target.closest("[data-photo]");if(ph){openPhoto(ph.dataset.photo);return}
+  const b=e.target.closest("[data-act]");if(!b||!db)return;
+  const {act,id,name}=b.dataset,me=$("runnerName").value.trim();
+  if(act==="claim")claim(id);
+  if(act==="done")upd("orders",id,{status:"levert",deliveredAt:Date.now()},"Levert ✓");
+  if(act==="release")upd("orders",id,{status:"ny",runner:""},"Lagt tilbake i køen");
+  if(act==="cancel"){const o=orders.find(x=>x.id===id);await del("orders",id,"Bestilling avbrutt");if(o&&o.photo&&assets)assets.delete(o.photo).catch(()=>{})}
+  if(act==="taskdone")upd("tasks",id,{done:true,doneBy:me,doneAt:Date.now()},"Oppgave ferdig ✓");
+  if(act==="taskundo")upd("tasks",id,{done:false,doneBy:""},"Oppgave åpnet igjen");
+  if(["rmbar","rmarea"].includes(act)&&!adminMode()){toast("Bare admin kan gjøre dette");return}
+  if(act==="rmtask"&&await ask("Slette oppgaven?"))del("tasks",id,"Oppgave slettet");
+  if(act==="rmshift"&&await ask("Slette vakten?"))del("shifts",id,"Vakt slettet");
+  if(act==="rmbar"&&await ask(`Fjerne ${name}?`))del("bars",id,"Bar fjernet");
+  if(act==="rmarea"&&await ask(`Fjerne området ${name}? Barer og vakter blir liggende.`))del("areas",id,"Område fjernet");
+});
+document.body.addEventListener("change",e=>{
+  const s=e.target.closest("[data-bar-area]");if(!s||!db)return;
+  if(!isAdmin){toast("Bare admin kan endre område");render();return}
+  upd("bars",s.dataset.barArea,{area:s.value},"Bar flyttet til "+(s.value||"uten område"));
+});
+
+/* Render helpers */
+function sortQueue(a,b){return (b.urgent-a.urgent)||(a.createdAt-b.createdAt)}
+function ticket(o,acts){
+  const cls=o.status==="levert"?"done":o.status==="på vei"?"moving":o.urgent?"urgent":"";
+  const st=o.status==="levert"?`<span class="tag done">Levert</span>`:o.status==="på vei"?`<span class="tag moving">På vei · ${esc(o.runner)}${floorOf(o.runner)?" · 📍 "+esc(floorOf(o.runner)):""}</span>`:`<span class="tag ny">Venter</span>`;
+  const late=o.status==="ny"&&mins(o.createdAt)>=LATE_MIN;
+  const area=areaOfBar(o.bar)||o.area;
+  return `<article class="ticket ${cls}">
+    <div><div class="what">${esc(o.qty)}× ${esc(o.item)}${o.unit?` <span style="font-weight:500;font-size:16px">${esc(o.unit)}</span>`:""}</div>
+    <div class="where">${esc(o.bar)}${area?` <em>· ${esc(area)}</em>`:""}</div>
+    ${o.status!=="levert"&&prefOf(o.bar)?`<div class="deliv">➜ ${esc(prefLabel(prefOf(o.bar)))}</div>`:""}</div>
+    <div class="acts">${acts||""}</div>
+    <div class="meta">${o.urgent&&o.status!=="levert"?`<span class="tag urgent">Haster</span>`:""}${st}<span class="${late?"late":""}">${ago(o.createdAt)}</span></div>
+    ${o.note?`<div class="note">💬 ${esc(o.note)}</div>`:""}
+    ${o.photo?`<button class="pic" data-photo="${esc(o.photo)}" aria-label="Vis bildet stort"><img src="${esc(photoUrl(o.photo,800))}" referrerpolicy="no-referrer" alt="Bilde fra ${esc(o.bar)}" loading="lazy" onerror="this.parentNode.outerHTML='<div class=note>📷 Bildet er slettet</div>'"></button>`:""}
+  </article>`;
+}
+function taskRow(t,acts){
+  const now=Date.now(),tEnd=t.end||t.at,overdue=!t.done&&tEnd<now,active=!t.done&&t.at<=now&&now<tEnd,soon=!t.done&&!overdue&&(active||t.at-now<30*60000);
+  const who=t.runner?t.runner:"Alle i området";
+  return `<div class="task ${t.done?"done":overdue?"overdue":soon?"soon":""}">
+    <div class="t">${hm(t.at)}${t.end?`<small>–${hm(t.end)}</small>`:""}</div>
+    <div><div class="ttl">${esc(t.title)}</div>
+      <div class="sub">📍 ${esc(t.area)} · ${esc(who)}${t.done&&t.doneBy?` · ferdig av ${esc(t.doneBy)}`:""}${overdue?` · <span class="late">forsinket</span>`:active?` · <b>pågår nå</b>`:""}</div>
+      ${t.note?`<div class="sub">💬 ${esc(t.note)}</div>`:""}</div>
+    <div>${acts||""}</div></div>`;
+}
+function areaOptions(sel,val,{blank}={}){
+  const names=areas.map(a=>a.name).sort((a,b)=>a.localeCompare(b,"no"));
+  sel.innerHTML=(blank?`<option value="">${blank}</option>`:"")+names.map(n=>`<option ${n===val?"selected":""}>${esc(n)}</option>`).join("");
+  if(!names.length&&!blank)sel.innerHTML=`<option value="">Legg til et område først</option>`;
+}
+function renderWhoSelect(){
+  const area=$("tkArea").value,t=toTs($("tkDay").value||todayStr(),$("tkTime").value||"00:00");
+  const onShift=[...new Set(shifts.filter(s=>s.area===area&&onNow(s,t)).map(s=>s.runner))];
+  const others=rosterNames().filter(n=>!onShift.includes(n));
+  const prev=$("tkWho").value;
+  $("tkWho").innerHTML=`<option value="">Alle på vakt i området</option>`+
+    (onShift.length?`<optgroup label="På vakt der da">${onShift.map(n=>`<option>${esc(n)}</option>`).join("")}</optgroup>`:"")+
+    (others.length?`<optgroup label="Andre runnere">${others.map(n=>`<option>${esc(n)}</option>`).join("")}</optgroup>`:"");
+  $("tkWho").value=prev;
+}
+function shiftSchedule(list,withDelete){
+  if(!list.length)return "";
+  const byDay={};list.forEach(s=>(byDay[dayKey(s.start)]??=[]).push(s));
+  return Object.keys(byDay).sort().map(k=>`<div class="day"><b>${cap(fmtD.format(new Date(byDay[k][0].start)))}</b>`+
+    byDay[k].sort((a,b)=>a.start-b.start).map(s=>`<div class="slot ${onNow(s)?"now":""}">
+      <div class="t">${hm(s.start)}–${hm(s.end)}</div>
+      <div><b>${esc(withDelete?s.runner:s.area)}</b>${withDelete?` <span style="color:var(--muted)">· ${esc(s.area)}</span>`:""}${onNow(s)?` <span class="tag done">Nå</span>`:""}</div>
+      <div>${withDelete?`<button class="btn ghost sm" data-act="rmshift" data-id="${s.id}">Slett</button>`:""}</div></div>`).join("")+`</div>`).join("");
+}
+
+/* Calendar */
+const HP=56; // piksler per time
+let calView=store.get("calView")||"cal";
+$("calDay").value=store.get("calDay")||todayStr();
+function setView(v){calView=v;store.set("calView",v);
+  document.querySelectorAll(".viewtoggle button").forEach(b=>b.setAttribute("aria-selected",b.dataset.view===v));
+  $("calWrap").hidden=v!=="cal";$("allShifts").hidden=v!=="list";}
+document.querySelectorAll(".viewtoggle button").forEach(b=>b.onclick=()=>setView(b.dataset.view));
+setView(calView);
+function shiftDay(n){const d=new Date($("calDay").value+"T12:00");d.setDate(d.getDate()+n);$("calDay").value=dayKey(d.getTime());store.set("calDay",$("calDay").value);renderCalendar()}
+$("calPrev").onclick=()=>shiftDay(-1);$("calNext").onclick=()=>shiftDay(1);
+$("calToday").onclick=()=>{$("calDay").value=todayStr();store.set("calDay",todayStr());renderCalendar()};
+$("calDay").onchange=()=>{store.set("calDay",$("calDay").value);renderCalendar()};
+function runnerColor(name){let h=0;for(const c of name.toLowerCase())h=(h*31+c.charCodeAt(0))%360;return `hsl(${h} 70% 80%)`}
+
+function renderCalendar(){
+  const day=$("calDay").value||todayStr(),d0=toTs(day,"00:00");
+  // En festivaldag regnes fra 06:00 til 06:00 neste morgen
+  const wStart=d0+6*3600000,wEnd=d0+30*3600000;
+  const dayShifts=shifts.filter(s=>s.start>=wStart&&s.start<wEnd);
+  const dayTasks=tasks.filter(t=>t.at>=wStart&&t.at<wEnd);
+  const areaNames=[...new Set([...areas.map(a=>a.name),...dayShifts.map(s=>s.area)])].sort((a,b)=>a.localeCompare(b,"no"));
+  const cal=$("cal");
+  if(!areaNames.length){cal.className="";cal.innerHTML=`<div class="empty-cal">Legg til områder under ⚙️ Admin for å se kalenderen.</div>`;return}
+
+  const hrs=[...dayShifts.flatMap(s=>[(s.start-d0)/3600000,(s.end-d0)/3600000]),...dayTasks.flatMap(t=>[(t.at-d0)/3600000,((t.end||t.at)-d0)/3600000])];
+  let h0=hrs.length?Math.floor(Math.min(...hrs))-1:16,h1=hrs.length?Math.ceil(Math.max(...hrs))+1:26;
+  h0=Math.max(6,h0);h1=Math.max(h0+4,Math.min(32,h1));
+  const top=h0*3600000+d0,px=ts=>(ts-top)/3600000*HP,totalH=(h1-h0)*HP;
+  const me=$("runnerName").value.trim().toLowerCase(),now=Date.now();
+
+  cal.className="cal";
+  cal.style.cssText=`--hp:${HP}px;grid-template-columns:52px repeat(${areaNames.length},minmax(130px,1fr))`;
+  let html=`<div class="corner">${new Date(d0).toLocaleDateString(LOCALE(),{weekday:"short",day:"numeric"})}</div>`;
+  html+=areaNames.map(a=>{const n=staffOn(a).length;return `<div class="colhead ${n?"":"unstaffed"}">${esc(a)}<small>${n?`${n} på vakt nå`:"ingen nå"}</small></div>`}).join("");
+  html+=`<div class="hours">`;for(let h=h0;h<h1;h++)html+=`<div class="hour">${String(h%24).padStart(2,"0")}:00</div>`;html+=`</div>`;
+
+  areaNames.forEach(a=>{
+    const list=dayShifts.filter(s=>s.area===a).sort((x,y)=>x.start-y.start);
+    const lanes=[];list.forEach(s=>{let i=lanes.findIndex(end=>end<=s.start);if(i<0){i=lanes.length;lanes.push(0)}lanes[i]=s.end;s._lane=i});
+    const n=Math.max(1,lanes.length);
+    html+=`<div class="col" data-col="${esc(a)}" style="height:${totalH}px">`;
+    list.forEach(s=>{
+      const y=px(s.start),h=Math.max(28,px(s.end)-y-2);
+      html+=`<button class="blk ${me&&s.runner.toLowerCase()===me?"me":""}" data-shift="${s.id}"
+        style="top:${y+1}px;height:${h}px;left:calc(${s._lane*100/n}% + 3px);width:calc(${100/n}% - 6px);background:${runnerColor(s.runner)}"
+        aria-label="${esc(s.runner)}, ${esc(a)}, ${hm(s.start)} til ${hm(s.end)}"><b>${esc(s.runner)}</b>${hm(s.start)}–${hm(s.end)}</button>`;
+    });
+    dayTasks.filter(t=>t.area===a).forEach(t=>{html+=`<div class="tmark ${t.done?"done":""}" style="top:${px(t.at)}px;${t.end?`height:${Math.max(22,px(t.end)-px(t.at))}px;margin-top:0;white-space:normal`:""}">✓ ${hm(t.at)}${t.end?"–"+hm(t.end):""} ${esc(t.title)}</div>`});
+    if(now>=top&&now<top+(h1-h0)*3600000)html+=`<div class="nowline" style="top:${px(now)}px"></div>`;
+    html+=`</div>`;
+  });
+  cal.innerHTML=html;
+  cal._meta={top,h0};
+}
+$("cal").addEventListener("click",async e=>{
+  const blk=e.target.closest("[data-shift]");
+  if(blk){const s=shifts.find(x=>x.id===blk.dataset.shift);if(!s)return;
+    if(await ask(`${s.runner} · ${s.area}\n${hm(s.start)}–${hm(s.end)}\n\nSlette denne vakten?`))del("shifts",s.id,"Vakt slettet");return}
+  const col=e.target.closest("[data-col]");if(!col)return;
+  const m=$("cal")._meta,y=e.clientY-col.getBoundingClientRect().top;
+  const ts=m.top+Math.round(y/HP*2)/2*3600000; // rundet til nærmeste halvtime
+  const d=new Date(ts),t=d=>String(d.getHours()).padStart(2,"0")+":"+String(d.getMinutes()).padStart(2,"0");
+  $("shArea").value=col.dataset.col;$("shDay").value=dayKey(ts);
+  $("shFrom").value=t(d);$("shTo").value=t(new Date(ts+4*3600000));
+  $("shRunner").scrollIntoView({behavior:"smooth",block:"center"});setTimeout(()=>$("shRunner").focus(),300);
+  toast(`${col.dataset.col} kl. ${t(d)} – skriv inn runner`);
+});
+
+/* Main render */
+function render(){
+  const now=Date.now();
+  // Bar "innlogging"
+  const barNames=bars.map(b=>b.name).sort((a,b)=>a.localeCompare(b,"no"));
+  let mb=bars.find(b=>b.id===store.get("barId"));
+  if(!mb&&store.get("bar")){mb=bars.find(b=>b.name===store.get("bar"));if(mb)store.set("barId",mb.id)}
+  if(mb&&store.get("bar")!==mb.name)store.set("bar",mb.name);
+  const want=mb?mb.name:"",loggedIn=!!mb;
+  $("barSelect").value=loggedIn?want:"";
+  $("barLogin").hidden=loggedIn;$("barSession").hidden=!loggedIn;
+  $("barPick").innerHTML=barNames.map(n=>{const a=areaOfBar(n);return `<button data-bar="${esc(n)}" data-barid="${esc(barId(n)||"")}"><b>${esc(n)}</b>${a?`<span>📍 ${esc(a)}</span>`:""}</button>`}).join("")
+    ||`<div class="empty">${db?"Ingen barer ennå. Admin legger dem inn under ⚙️ Admin.":"Laster barer…"}</div>`;
+  updateSend();
+  const myBar=$("barSelect").value,myBarArea=areaOfBar(myBar);
+  const barStaff=myBarArea?staffOn(myBarArea).map(s=>s.runner):[];
+  $("barMeName").textContent=myBar;
+  {const p=prefOf(myBar),show=!!p&&!prefEditing;
+   $("prefSummary").hidden=!show;$("prefForm").hidden=show;
+   if(show)$("prefText").textContent=prefLabel(p);}
+  $("barRunnerInfo").textContent=myBar?(myBarArea?`📍 ${myBarArea} · ${barStaff.length?"Runner nå: "+barStaff.join(", "):"Ingen runner på vakt akkurat nå"}`:""):"";
+
+  const mine=orders.filter(o=>o.bar===myBar).sort((a,b)=>{const r={"ny":0,"på vei":1,"levert":2};return (r[a.status]-r[b.status])||(b.createdAt-a.createdAt)}).slice(0,30);
+  fill("barOrders",mine.map(o=>ticket(o,o.status==="ny"?`<button class="btn ghost sm" data-act="cancel" data-id="${o.id}">Avbryt</button>`:"")).join(""),
+    myBar?"Ingen bestillinger ennå. Trykk på det dere trenger over, og send.":"Velg baren din først.");
+
+  // Runner
+  const me=$("runnerName").value.trim(),meL=me.toLowerCase();
+  $("runLogin").hidden=!!me;$("runSession").hidden=!me;
+  $("runMeName").innerHTML=esc(me)+floorPill(me);
+  {const names=rosterNames();
+   const on=n=>!!floorOf(n);
+   names.sort((a,b)=>(on(b)-on(a))||a.localeCompare(b,"no"));
+   $("runPick").innerHTML=names.map(n=>`<button data-runner="${esc(n)}"><b>${esc(n)}</b>${floorOf(n)?`<span>📍 ${esc(floorOf(n))} nå</span>`:`<span>${(()=>{const x=shifts.filter(s=>same(s.runner,n)&&s.start>now).sort((a,b)=>a.start-b.start)[0];return x?"Vakt kl. "+hm(x.start):""})()}</span>`}</button>`).join("")
+     ||`<div class="empty">${db?"Ingen runnere på lista ennå.":"Laster…"}</div>`;}
+  // Logg ut runner som er fjernet fra lista
+  if(me&&rosterLoaded&&!rosterNames().some(n=>same(n,me))){setRunner("");toast("Navnet ditt er ikke på lista lenger")}
+  const myShifts=me?shifts.filter(s=>s.runner.toLowerCase()===meL&&s.end>now-3600000).sort((a,b)=>a.start-b.start):[];
+  const current=myShifts.find(s=>onNow(s)),next=myShifts.find(s=>s.start>now);
+  let card="";
+  if(!me)card=`<div class="empty" style="margin-top:14px">Skriv navnet ditt for å se vakten din.</div>`;
+  else if(current){
+    const barsHere=bars.filter(b=>b.area===current.area).map(b=>b.name);
+    card=`<div class="shiftnow"><div class="sm">Du er på vakt nå</div><div class="big">📍 ${esc(current.area)}</div>
+      <div class="sm">Til kl. ${hm(current.end)}${barsHere.length?` · Barer: ${barsHere.map(esc).join(", ")}`:""}</div></div>`;
+  }else if(next)card=`<div class="shiftnow" style="background:var(--panel);color:var(--ink);border:1px solid var(--line)"><div class="sm">Neste vakt</div><div class="big">📍 ${esc(next.area)}</div><div class="sm">${cap(fmtD.format(new Date(next.start)))} kl. ${hm(next.start)}–${hm(next.end)}</div></div>`;
+  else card=`<div class="empty" style="margin-top:14px">Du har ingen vakter lagt inn. Spør vaktansvarlig.</div>`;
+  $("shiftNow").innerHTML=card;
+
+  const myTasks=me?tasks.filter(t=>{
+    if(t.runner)return t.runner.toLowerCase()===meL;
+    return shifts.some(s=>s.runner.toLowerCase()===meL&&s.area===t.area&&s.start<=t.at&&t.at<s.end);
+  }).filter(t=>!t.done||t.doneAt>now-3600000).sort((a,b)=>(a.done-b.done)||(a.at-b.at)):[];
+  fill("myTasks",myTasks.map(t=>taskRow(t,t.done?`<button class="btn ghost sm" data-act="taskundo" data-id="${t.id}">Angre</button>`:`<button class="btn lime sm" data-act="taskdone" data-id="${t.id}">Ferdig</button>`)).join(""),
+    me?"Ingen oppgaver på deg. 👌":"Skriv navnet ditt først.");
+
+  const runs=orders.filter(o=>o.status==="på vei"&&me&&o.runner.toLowerCase()===meL);
+  fill("myRuns",runs.map(o=>ticket(o,`<button class="btn lime" data-act="done" data-id="${o.id}">Levert</button><button class="btn ghost sm" data-act="release" data-id="${o.id}">Slipp</button>`)).join(""),
+    "Ingen leveringer akkurat nå.");
+
+  const filterArea=$("onlyMine").checked&&current?current.area:null;
+  const open=orders.filter(o=>o.status==="ny"&&(!filterArea||(areaOfBar(o.bar)||o.area)===filterArea)).sort(sortQueue);
+  fill("openOrders",open.map(o=>ticket(o,`<button class="btn ${o.urgent?"cherry":""}" data-act="claim" data-id="${o.id}">Ta den</button>`)).join(""),
+    filterArea?`Ingen ventende i ${esc(filterArea)}. 😮‍💨`:"Alt er levert. Ta en pust 😮‍💨");
+  $("myShifts").innerHTML=shiftSchedule(myShifts,false)||`<div class="empty">Ingen kommende vakter.</div>`;
+
+  // Plan
+  areaOptions($("shArea"),$("shArea").value);areaOptions($("tkArea"),$("tkArea").value);areaOptions($("newBarArea"),$("newBarArea").value,{blank:"Uten område"});
+  renderWhoSelect();renderRoster();
+  $("runnerList").innerHTML=rosterNames().map(n=>`<option value="${esc(n)}">`).join("");
+
+  const areaNames=areas.map(a=>a.name).sort((a,b)=>a.localeCompare(b,"no"));
+  $("floorBoard").innerHTML=areaNames.map(a=>{
+    const on=staffOn(a),nextS=shifts.filter(s=>s.area===a&&s.start>now).sort((x,y)=>x.start-y.start)[0];
+    const waiting=orders.filter(o=>o.status==="ny"&&(areaOfBar(o.bar)||o.area)===a).length;
+    const barsHere=bars.filter(b=>b.area===a).map(b=>b.name);
+    return `<div class="floor ${on.length?"staffed":"unstaffed"}"><h3>${esc(a)}</h3>
+      <div class="who">${on.length?"🏃 "+on.map(s=>`${esc(s.runner)} <span class="sub">til ${hm(s.end)}</span>`).join("<br>🏃 "):`<span class="late">Ingen på vakt</span>`}</div>
+      ${nextS?`<div class="sub">Neste: ${esc(nextS.runner)} kl. ${hm(nextS.start)}</div>`:""}
+      <div class="bars">${barsHere.length?"🍸 "+barsHere.map(esc).join(", "):`<span class="sub">Ingen barer</span>`}</div>
+      <div class="sub" style="margin-top:4px">${waiting} bestilling${waiting===1?"":"er"} venter</div></div>`;
+  }).join("")||`<div class="empty">Legg til områder under ⚙️ Admin (f.eks. «1. etasje», «Bakgården»).</div>`;
+
+  renderCalendar();
+  $("allShifts").innerHTML=shiftSchedule(shifts.filter(s=>s.end>now-3600000),true)||`<div class="empty">Ingen vakter satt opp ennå.</div>`;
+  const openTasks=tasks.filter(t=>!t.done||t.doneAt>now-3600000).sort((a,b)=>(a.done-b.done)||(a.at-b.at));
+  fill("allTasks",openTasks.map(t=>taskRow(t,`<button class="btn ghost sm" data-act="rmtask" data-id="${t.id}">Slett</button>`)).join(""),"Ingen oppgaver lagt inn.");
+
+  if(!$("barTable").contains(document.activeElement))$("barTable").innerHTML=bars.slice().sort((a,b)=>a.name.localeCompare(b.name,"no")).map(b=>
+    `<tr><td><input type="text" class="nameedit" data-bar-name="${b.id}" value="${esc(b.name)}" aria-label="Navn på bar"></td><td><select data-bar-area="${b.id}" aria-label="Område for ${esc(b.name)}"><option value="">Uten område</option>${areaNames.map(n=>`<option ${n===b.area?"selected":""}>${esc(n)}</option>`).join("")}</select></td>
+    <td><button class="btn ghost sm" data-act="rmbar" data-id="${b.id}" data-name="${esc(b.name)}">Fjern</button></td></tr>`).join("")
+    ||`<tr><td colspan="3" style="color:var(--muted)">Ingen barer ennå.</td></tr>`;
+  $("areaList").innerHTML=areas.length?`<div class="chips">${areas.slice().sort((a,b)=>a.name.localeCompare(b.name,"no")).map(a=>`<button class="chip" data-act="rmarea" data-id="${a.id}" data-name="${esc(a.name)}" title="Fjern ${esc(a.name)}">${esc(a.name)} ✕</button>`).join("")}</div>`:`<div class="empty">Ingen områder ennå.</div>`;
+
+  renderChat();updateChatTab();
+
+  // Overview: per område
+  {const groups=[...areas.map(a=>a.name).sort((a,b)=>a.localeCompare(b,"no"))];
+   if(bars.some(b=>!b.area||!areas.some(a=>a.name===b.area)))groups.push("");
+   $("perArea").innerHTML=groups.map(a=>{
+     const bs=bars.filter(b=>a?b.area===a:(!b.area||!areas.some(x=>x.name===b.area))).sort((x,y)=>x.name.localeCompare(y.name,"no"));
+     const on=a?staffOn(a).map(s=>s.runner):[];
+     const cnt=(name,st)=>orders.filter(o=>o.bar===name&&o.status===st).length;
+     const wait=bs.reduce((n,b)=>n+cnt(b.name,"ny"),0),move=bs.reduce((n,b)=>n+cnt(b.name,"på vei"),0);
+     return `<div class="acard ${a?(on.length?"staffed":"unstaffed"):""}">
+       <div class="hd"><h3 style="margin:0">${a?esc(a):"Uten område"}</h3><span class="tot">${bs.length} bar${bs.length===1?"":"er"}</span></div>
+       ${a?`<div class="run">${on.length?"🏃 "+on.map(esc).join(", "):`<span class="late">Ingen runner på vakt</span>`}</div>`:`<div class="run tot">Gi disse et område under ⚙️ Admin</div>`}
+       <ul>${bs.map(b=>{const w=cnt(b.name,"ny"),m=cnt(b.name,"på vei");
+         return `<li><span>${esc(b.name)}</span><span class="c">${w?`<span class="tag ny">${w} venter</span>`:""}${m?`<span class="tag moving">${m} på vei</span>`:""}${!w&&!m?`<span style="color:var(--muted);font-weight:500">✓</span>`:""}</span></li>`}).join("")||`<li class="tot">Ingen barer</li>`}</ul>
+       ${wait||move?`<div class="tot" style="margin-top:6px">Totalt: ${wait} venter · ${move} på vei</div>`:""}
+     </div>`}).join("")||`<div class="empty">Ingen områder ennå.</div>`;}
+
+  // Overview
+  const count=s=>orders.filter(o=>o.status===s).length;
+  $("sNy").textContent=count("ny");$("sMove").textContent=count("på vei");$("sDone").textContent=count("levert");
+  $("perBar").innerHTML=bars.slice().sort((a,b)=>(a.area||"~").localeCompare(b.area||"~","no")||a.name.localeCompare(b.name,"no")).map(b=>{
+    const os=orders.filter(o=>o.bar===b.name),c=s=>os.filter(o=>o.status===s).length;
+    return `<tr><td><b>${esc(b.name)}</b></td><td>${esc(b.area||"–")}</td><td>${c("ny")}</td><td>${c("på vei")}</td><td>${c("levert")}</td></tr>`}).join("")
+    ||`<tr><td colspan="5" style="color:var(--muted)">Ingen barer ennå.</td></tr>`;
+  fill("allActive",orders.filter(o=>o.status!=="levert").sort(sortQueue).map(o=>ticket(o,o.status==="ny"?`<button class="btn" data-act="claim" data-id="${o.id}">Ta den</button>`:"")).join(""),"Ingen aktive bestillinger.");
+}
+setInterval(render,30000);
+
+/* Språkknapp */
+$("langBtn").onclick=()=>{LANG=LANG==="en"?"no":"en";store.set("lang",LANG);applyLang();render()};
+applyLang();
+
+/* ===================== BACKEND: Google Sheets via Apps Script =====================
+   Lim inn URL-en til Apps Script-webappen din her (se README.md). */
+const API_URL="https://script.google.com/macros/s/AKfycbyeRENy5_jSX3Xyoj2QMqagIUahNEYqrFBQmsMBr1Pu8ZYtnNvkAnFvnRbri4424-nWyA/exec";
+const POLL_MS=4000;
+
+const _ls={get:k=>{try{return localStorage.getItem(k)||""}catch(e){return ""}}};
+const API={
+  async call(op,payload={}){
+    if(!/^https:\/\/script\.google\.com\//.test(API_URL))throw Object.assign(new Error("API_URL mangler"),{code:"config"});
+    const r=await fetch(API_URL,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},
+      body:JSON.stringify({op,token:_ls.get("adminToken"),...payload})});
+    const j=await r.json();
+    if(!j.ok)throw Object.assign(new Error(j.error||"Feil"),{code:j.code||""});
+    return j;
+  }
+};
+const photoUrl=(id,w=1600)=>`https://drive.google.com/thumbnail?id=${encodeURIComponent(id)}&sz=w${w}`;
+const newId=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,8);
+
+function makeDb(onStatus){
+  const cache={},fires=new Set();let version=null,busy=false;
+  const emit=()=>fires.forEach(f=>{try{f()}catch(e){console.error(e)}});
+  async function pull(force){
+    if(busy)return;if(document.hidden&&!force)return;busy=true;
+    try{
+      const j=await API.call("pull",{since:force?null:version});
+      if(j.changed){version=j.version;for(const [c,rows] of Object.entries(j.data))cache[c]=new Map(rows.map(r=>[r.id,r.data]));emit()}
+      onStatus(true);
+    }catch(e){onStatus(false,e)}
+    busy=false;
+  }
+  setInterval(()=>pull(false),POLL_MS);
+  document.addEventListener("visibilitychange",()=>{if(!document.hidden)pull(true)});
+  const local=(col)=>cache[col]||(cache[col]=new Map());
+  async function send(op,col,id,data){
+    try{await API.call(op,{col,id,data})}
+    catch(e){version=null;pull(true);throw e}
+    version=null;setTimeout(()=>pull(true),150);
+  }
+  function docRef(col,id){
+    return {id,
+      async set(data){local(col).set(id,{...data});emit();await send("set",col,id,data)},
+      async update(patch){const cur=local(col).get(id)||{};local(col).set(id,{...cur,...patch});emit();await send("update",col,id,patch)},
+      async delete(){local(col).delete(id);emit();await send("delete",col,id)},
+      async get(){const j=await API.call("get",{col,id});return {id,exists:j.exists,data:()=>j.data}},
+      async acquire({holder,ttlMs}){const j=await API.call("lease",{col,id,holder,ttl:ttlMs});return {acquired:j.acquired}}
+    };
+  }
+  function query(col,ord,lim){
+    const q={
+      orderBy(f,dir="asc"){return query(col,{f,dir},lim)},
+      limit(n){return query(col,ord,n)},
+      doc(id){return docRef(col,id||newId())},
+      onSnapshot(cb){
+        const fire=()=>{if(!cache[col])return;
+          let docs=[...cache[col].entries()].map(([id,d])=>({id,exists:true,data:()=>d}));
+          if(ord){const k=ord.dir==="desc"?-1:1;docs.sort((a,b)=>{const x=a.data()[ord.f],y=b.data()[ord.f];return (x>y?1:x<y?-1:0)*k})}
+          if(lim)docs=docs.slice(0,lim);cb({docs})};
+        fires.add(fire);fire();return ()=>fires.delete(fire);
+      }
+    };
+    return q;
+  }
+  pull(true);
+  return {collection:(c)=>query(c,null,null)};
+}
+const assetsApi={
+  async upload(blob){
+    const b64=await new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(String(r.result).split(",")[1]);r.onerror=rej;r.readAsDataURL(blob)});
+    const j=await API.call("upload",{data:b64,mime:blob.type||"image/jpeg"});return {id:j.id};
+  },
+  async delete(id){await API.call("unupload",{id})}
+};
+
+/* Connect */
+(async()=>{
+  render();
+  isAdmin=true;pinDoc={}; // alle kan prøve ⚙️ – PIN-en sjekkes på serveren
+  if(!_ls.get("adminToken"))store.set("adminUntil","0");
+  applyAdmin();
+  const setStatus=(ok,e)=>{
+    $("offline").style.display=ok?"none":"block";
+    $("live").textContent=ok?"Live":"Frakoblet";$("live").classList.toggle("on",ok);
+    if(!ok&&e&&e.code==="config")$("offline").textContent="API_URL er ikke satt i index.html ennå (se README).";
+  };
+  db=makeDb(setStatus);
+  assets=assetsApi;$("photoBox").hidden=false;
+  const sub=(q,set)=>q.onSnapshot(s=>{set(s.docs.map(d=>({id:d.id,...d.data()})));render()});
+  sub(db.collection("areas"),v=>areas=v);
+  sub(db.collection("bars"),v=>bars=v);
+  sub(db.collection("barprefs"),v=>{prefs={};v.forEach(p=>prefs[p.id]=p)});
+  db.collection("chat").orderBy("ts","desc").limit(200).onSnapshot(s=>{const prev=chat.length;chat=s.docs.map(d=>({id:d.id,...d.data()})).reverse();render();onChatUpdate(prev)});
+  sub(db.collection("shifts").orderBy("start","asc").limit(500),v=>{shifts=v;_rl.s=true;rosterLoaded=_rl.r&&_rl.s});
+  sub(db.collection("runners"),v=>{runnersDocs=v;_rl.r=true;rosterLoaded=_rl.r&&_rl.s});
+  sub(db.collection("presence"),v=>presence=v);
+  {const n=$("runnerName").value.trim();if(n)setPresence(n,Date.now())}
+  sub(db.collection("tasks").orderBy("at","asc").limit(500),v=>tasks=v);
+  sub(db.collection("orders").orderBy("createdAt","desc").limit(500),v=>orders=v);
+})();
+</script>
+</body>
+</html>
